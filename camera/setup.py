@@ -21,5 +21,5 @@ steer_center = 2250
 
 steer_diapason = steer_left - steer_right
 
-steer_to_cam_multiplier = int(steer_diapason / cam_diapason)
+steer_to_cam_multiplier = steer_diapason / cam_diapason
 steer_confidence = steer_diapason // 10
