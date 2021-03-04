@@ -1,3 +1,5 @@
+import numpy as np
+
 cam_up = 700
 cam_down = 1500
 cam_left = 2300
@@ -23,3 +25,8 @@ steer_diapason = steer_left - steer_right
 
 steer_to_cam_multiplier = steer_diapason / cam_diapason
 steer_confidence = steer_diapason // 10
+
+lower_red0 = np.array([0, 110, 110])
+upper_red0 = np.array([15, 255, 255])
+lower_red1 = np.array([165, 110, 110])
+upper_red1 = np.array([180, 255, 255])

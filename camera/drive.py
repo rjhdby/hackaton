@@ -15,6 +15,11 @@ class Drive:
         if abs(steer - steer_center) < steer_confidence:
             self.stop()
             return
+        if steer < steer_right:
+            steer = steer_right
+        if steer > steer_left:
+            steer = steer_left
+
         self.pwm1.setPWM(14, 0, steer)
         self.motor.setSpeed(50)
         self.motor.run(Raspi_MotorHAT.FORWARD)

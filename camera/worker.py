@@ -66,8 +66,10 @@ class Worker:
             contours = self._get_contours(mask)
 
             if len(contours) == 0:
+                self.drive.stop()
                 pid_ver.reset()
                 pid_ver.reset()
+                self._search()
                 continue
 
             # find the largest contour in the mask, then use
@@ -75,15 +77,6 @@ class Worker:
             # centroid
             c = max(contours, key=cv2.contourArea)
             ((x, y), radius) = cv2.minEnclosingCircle(c)
-            M = cv2.moments(c)
-            center = (int(M["m10"] / M["m00"]), int(M["m01"] / M["m00"]))
-            # only proceed if the radius meets a minimum size
-
-            # if radius > 5:
-            #     # draw the circle and centroid on the frame,
-            #     # then update the list of tracked points
-            #     cv2.circle(img, (int(x), int(y)), int(radius), (0, 255, 255), 2)
-            #     cv2.circle(img, center, 5, (0, 0, 255), -1)
 
             angle_x_err = (x / cam_hor_res - 0.5) * cam_x_angle
             angle_y_err = (y / cam_ver_res - 0.5) * cam_y_angle
@@ -93,6 +86,20 @@ class Worker:
             self._update_cam(x_err, y_err)
 
             self._move()
+
+    def _search(self):
+        if self.cam_hor >= cam_hor_center:
+            self.cam_hor += 100
+        else:
+            self.cam_hor -= 100
+
+        if self.cam_hor > cam_left:
+            self.cam_hor = cam_hor_center - 100
+        if self.cam_hor < cam_right:
+            self.cam_hor = cam_hor_center + 100
+
+        pid_hor.reset()
+        pwm1.setPWM(1, 0, self.cam_hor)
 
     def _move(self):
         if abs(self.cam_hor - cam_hor_center) < cam_hor_confidence:
@@ -107,14 +114,9 @@ class Worker:
     @staticmethod
     def _get_mask(hsv):
         # lower mask (0-10)
-        lower_red = np.array([0, 110, 110])
-        upper_red = np.array([15, 255, 255])
-        mask0 = cv2.inRange(hsv, lower_red, upper_red)
-
+        mask0 = cv2.inRange(hsv, lower_red0, upper_red0)
         # upper mask (170-180)
-        lower_red = np.array([165, 110, 110])
-        upper_red = np.array([180, 255, 255])
-        mask1 = cv2.inRange(hsv, lower_red, upper_red)
+        mask1 = cv2.inRange(hsv, lower_red1, upper_red1)
 
         mask = mask0 + mask1
 
