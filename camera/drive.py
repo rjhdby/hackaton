@@ -11,12 +11,12 @@ class Drive:
         self.pwm1.setPWM(14, 0, steer_center)
 
     def track(self, cam):
-        steer = int((cam - cam_right) * steer_to_cam_multiplier + steer_right)
+        steer = steer_left - int((cam - cam_right) * steer_to_cam_multiplier)
         if abs(steer - steer_center) < steer_confidence:
             self.stop()
             return
         self.pwm1.setPWM(14, 0, steer)
-        self.motor.setSpeed(10)
+        self.motor.setSpeed(50)
         self.motor.run(Raspi_MotorHAT.FORWARD)
 
     def stop(self):
