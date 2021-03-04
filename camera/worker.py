@@ -61,7 +61,7 @@ class Worker:
             clear_output(wait=True)
 
             hsv = self._get_hsv()
-            mask = self._get_mask(hsv)
+            mask = self._get_test_mask(hsv)
             # img = self.image // 4
             contours = self._get_contours(mask)
 
@@ -112,7 +112,7 @@ class Worker:
         return cv2.cvtColor(blurred, cv2.COLOR_RGB2HSV)
 
     @staticmethod
-    def _get_mask(hsv):
+    def _get_test_mask(hsv):
         # lower mask (0-10)
         mask0 = cv2.inRange(hsv, lower_red0, upper_red0)
         # upper mask (170-180)
@@ -124,6 +124,19 @@ class Worker:
         mask = cv2.dilate(mask, None, iterations=2)
 
         return mask
+
+    @staticmethod
+    def _get_target_mask(hsv):
+        lower_color = np.array(target_low_color)
+        upper_color = np.array(target_high_color)
+
+        mask = cv2.inRange(hsv, lower_color, upper_color)
+
+        mask = cv2.erode(mask, None, iterations=2)
+        mask = cv2.dilate(mask, None, iterations=2)
+
+        return mask
+
 
     @staticmethod
     def _get_contours(mask):

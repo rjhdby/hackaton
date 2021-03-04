@@ -26,7 +26,12 @@ steer_diapason = steer_left - steer_right
 steer_to_cam_multiplier = steer_diapason / cam_diapason
 steer_confidence = steer_diapason // 10
 
+# COLORS
+
 lower_red0 = np.array([0, 110, 110])
 upper_red0 = np.array([15, 255, 255])
 lower_red1 = np.array([165, 110, 110])
 upper_red1 = np.array([180, 255, 255])
+
+target_low_color = [50, 200, 50]
+target_high_color = [255, 255, 255]
