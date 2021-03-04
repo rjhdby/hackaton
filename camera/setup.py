@@ -11,13 +11,13 @@ cam_ver_res = 240
 
 cam_diapason = cam_left - cam_right
 
-cam_hor_center = (cam_left + cam_right) // 2
+cam_hor_center = 1400
 cam_hor_confidence = cam_diapason // 10  # 10%
 
 steer_left = 2600
-steer_right = 2000
+steer_right = 1700
 
-steer_center = (steer_left + steer_right) // 2
+steer_center = 2250
 
 steer_diapason = steer_left - steer_right
 

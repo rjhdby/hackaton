@@ -98,7 +98,7 @@ class Worker:
         if abs(self.cam_hor - cam_hor_center) < cam_hor_confidence:
             self.drive.stop()
             return
-        self.drive.track(self.cam_hor)
+        self.drive.track(self.cam_hor - cam_hor_center)
 
     def _get_hsv(self):
         blurred = cv2.GaussianBlur(self.image, (5, 5), 0)

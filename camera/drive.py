@@ -10,8 +10,8 @@ class Drive:
     def __init__(self):
         self.pwm1.setPWM(14, 0, steer_center)
 
-    def track(self, cam):
-        steer = steer_left - int((cam - cam_right) * steer_to_cam_multiplier)
+    def track(self, deviation):
+        steer = steer_center + int(deviation * steer_to_cam_multiplier)
         if abs(steer - steer_center) < steer_confidence:
             self.stop()
             return
