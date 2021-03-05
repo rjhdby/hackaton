@@ -71,6 +71,7 @@ class Worker:
             hsv = self._get_hsv(self.image)
 
             target_mask = processor.get_mask(hsv, target_low_color, target_high_color)
+            processor.save_image("target_mask", target_mask)
             target_info = processor.get_contours_circle_info(target_mask, self.image)
             print(f"target circle info x, y, r {target_info}")
             if target_info is None:
