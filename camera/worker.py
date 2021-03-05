@@ -92,8 +92,9 @@ class Worker:
             angle_y_err = (target_y / cam_ver_res - 0.5) * cam_y_angle
 
             x_err = -(cam_left - cam_right) * angle_x_err // 180
-            y_err = (cam_down - cam_up) * angle_y_err // 100
-            self._update_cam(x_err, y_err)
+            # y_err = (cam_down - cam_up) * angle_y_err // 100
+
+            self._update_cam(x_err, 0)
 
             self._move()
 
