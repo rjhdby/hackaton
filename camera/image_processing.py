@@ -7,6 +7,7 @@ from camera.setup import *
 
 from pathlib import Path
 from matplotlib import pyplot as plt
+import numpy as np
 
 debug_images_path = "./images"
 
@@ -43,14 +44,21 @@ class Processor:
 
                 img_new = img.copy()
                 img_new[:, :, 0] = mask
+                img_new = cv2.cvtColor(img_new, cv2.COLOR_HSV2RGB)
+                self.save_image("image+mask", img_new)
 
-                cv2.imwrite(f"{self.run_path}/image+mask_{len(os.listdir(self.run_path))}.jpg", img_new)
-                plt.imshow(img_new)
-                plt.show()
             except Exception as e:
                 print(e)
 
         return x, y, radius
+
+    def save_image(self, prefix, img):
+        if debug_images:
+            path = f"{self.run_path}/{prefix}"
+            Path(path).mkdir(parents=True, exist_ok=True)
+            cv2.imwrite(f"{path}/{len(os.listdir(path))}.jpg", img)
+            plt.imshow(img)
+            plt.show()
 
     @staticmethod
     def get_test_mask(hsv):
