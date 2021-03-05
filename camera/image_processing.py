@@ -22,7 +22,7 @@ def get_contours_circle_info(mask, img=None):
     c = max(contours, key=cv2.contourArea)
     ((x, y), radius) = cv2.minEnclosingCircle(c)
 
-    if debug_images and img:
+    if debug_images and img is not None:
         try:
             M = cv2.moments(c)
             center = (int(M["m10"] / M["m00"]), int(M["m01"] / M["m00"]))
