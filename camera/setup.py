@@ -5,8 +5,8 @@ debug_images_time = 1
 
 cam_up = 700
 cam_down = 1500
-cam_left = 2300
-cam_right = 300
+cam_left = 2650
+cam_right = 600
 
 cam_x_angle = 170
 cam_y_angle = 127
@@ -16,13 +16,13 @@ cam_ver_res = 240
 
 cam_diapason = cam_left - cam_right
 
-cam_hor_center = 1400
+cam_hor_center = 1730
 cam_hor_confidence = cam_diapason // 10  # 10%
 
-steer_left = 2600
-steer_right = 1700
+steer_left = 2700
+steer_right = 1800
 
-steer_center = 2250
+steer_center = 2400
 
 steer_diapason = steer_left - steer_right
 
