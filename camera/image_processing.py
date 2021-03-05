@@ -64,6 +64,15 @@ class Processor:
             print(e)
 
     @staticmethod
+    def input_to_hsv(img):
+        img = img.copy()
+        blurred = cv2.GaussianBlur(img, (3, 3), 0)
+        # processor.save_image("input", blurred)
+        img = cv2.cvtColor(blurred, cv2.COLOR_RGB2HSV)
+        # processor.save_image("hsv_input", img)
+        return img
+
+    @staticmethod
     def get_test_mask(hsv):
         # lower mask (0-10)
         mask0 = cv2.inRange(hsv, lower_red0, upper_red0)

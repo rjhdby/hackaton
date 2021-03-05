@@ -68,7 +68,7 @@ class Worker:
         for _ in self.camera.capture_continuous(self.image, format='rgb', use_video_port=True):
             clear_output(wait=True)
 
-            hsv = self._get_hsv(self.image)
+            hsv = processor.input_to_hsv(self.image)
 
             target_mask = processor.get_mask(hsv, target_low_color, target_high_color)
             processor.save_image("target_mask", target_mask)
@@ -130,10 +130,9 @@ class Worker:
             return
         self.drive.track(self.cam_hor - cam_hor_center)
 
-    def _get_hsv(self, img):
-        img = img.copy()
-        blurred = cv2.GaussianBlur(img, (3, 3), 0)
-        # processor.save_image("input", blurred)
-        img = cv2.cvtColor(blurred, cv2.COLOR_RGB2HSV)
-        # processor.save_image("hsv_input", img)
-        return img
+
+class StatePredictor:
+
+    @staticmethod
+    def predict():
+        pass
