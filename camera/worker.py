@@ -122,5 +122,5 @@ class Worker:
         self.drive.track(self.cam_hor - cam_hor_center)
 
     def _get_hsv(self):
-        blurred = cv2.GaussianBlur(self.image[cam_ver_res // 3:cam_ver_res, 0:cam_hor_res], (5, 5), 0)
+        blurred = cv2.GaussianBlur(self.image[cam_ver_res // 3:cam_ver_res, 0:cam_hor_res], (3, 3), 0)
         return cv2.cvtColor(blurred, cv2.COLOR_RGB2HSV)
