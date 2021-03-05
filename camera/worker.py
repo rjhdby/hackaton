@@ -13,6 +13,7 @@ from matplotlib.colors import hsv_to_rgb
 import imutils
 from camera.drive import Drive
 from camera.setup import *
+from camera.utils import debug
 
 pid_ver = PID(0.3, 0.02, 0.01, setpoint=0, output_limits=(-200, 200))
 pid_hor = PID(0.3, 0.02, 0.01, setpoint=0, output_limits=(-200, 200))
@@ -38,6 +39,7 @@ class Worker:
         self.camera.start_preview()
         sleep(2)
 
+    @debug
     def _update_cam(self, err_hor, err_ver, dt=None):
         self.cam_ver += int(pid_ver(-err_ver, dt))
         self.cam_hor += int(pid_hor(-err_hor, dt))
@@ -57,6 +59,7 @@ class Worker:
         pwm1.setPWM(0, 0, self.cam_ver)
         pwm1.setPWM(1, 0, self.cam_hor)
 
+    @debug
     def track_target(self):
         for _ in self.camera.capture_continuous(self.image, format='rgb', use_video_port=True):
             clear_output(wait=True)
@@ -82,21 +85,6 @@ class Worker:
 
             self._move()
 
-    def _get_target_circle_info(self, hsv):
-        mask = self._get_target_mask(hsv)
-        # img = self.image // 4
-        contours = self._get_contours(mask)
-
-        if len(contours) == 0:
-            return None
-
-        # find the largest contour in the mask, then use
-        # it to compute the minimum enclosing circle and
-        # centroid
-        c = max(contours, key=cv2.contourArea)
-        ((x, y), radius) = cv2.minEnclosingCircle(c)
-        return x, y, radius
-
     def _search(self):
         if self.cam_hor >= cam_hor_center:
             self.cam_hor += 100
@@ -111,6 +99,7 @@ class Worker:
         pid_hor.reset()
         pwm1.setPWM(1, 0, self.cam_hor)
 
+    @debug
     def _move(self):
         if abs(self.cam_hor - cam_hor_center) < cam_hor_confidence:
             self.drive.stop()
@@ -120,6 +109,22 @@ class Worker:
     def _get_hsv(self):
         blurred = cv2.GaussianBlur(self.image, (5, 5), 0)
         return cv2.cvtColor(blurred, cv2.COLOR_RGB2HSV)
+
+    @staticmethod
+    def _get_target_circle_info(hsv):
+        mask = Worker._get_target_mask(hsv)
+        # img = self.image // 4
+        contours = Worker._get_contours(mask)
+
+        if len(contours) == 0:
+            return None
+
+        # find the largest contour in the mask, then use
+        # it to compute the minimum enclosing circle and
+        # centroid
+        c = max(contours, key=cv2.contourArea)
+        ((x, y), radius) = cv2.minEnclosingCircle(c)
+        return x, y, radius
 
     @staticmethod
     def _get_test_mask(hsv):
@@ -150,4 +155,5 @@ class Worker:
     @staticmethod
     def _get_contours(mask):
         contours = cv2.findContours(mask.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        print(f"found number of contours: {len(contours)}")
         return imutils.grab_contours(contours)
