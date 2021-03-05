@@ -53,30 +53,25 @@ class Worker:
         if self.cam_hor > cam_left:
             self.cam_hor = cam_left
             pid_hor.reset()
+        print(f"_update_cam: hor: {self.cam_hor}, ver: {self.cam_ver}")
         pwm1.setPWM(0, 0, self.cam_ver)
         pwm1.setPWM(1, 0, self.cam_hor)
 
-    def track(self):
+    def track_target(self):
         for _ in self.camera.capture_continuous(self.image, format='rgb', use_video_port=True):
             clear_output(wait=True)
 
             hsv = self._get_hsv()
-            mask = self._get_test_mask(hsv)
-            # img = self.image // 4
-            contours = self._get_contours(mask)
 
-            if len(contours) == 0:
+            target_info = self._get_target_circle_info(hsv)
+            if target_info is None:
                 self.drive.stop()
                 pid_ver.reset()
                 pid_ver.reset()
                 self._search()
                 continue
 
-            # find the largest contour in the mask, then use
-            # it to compute the minimum enclosing circle and
-            # centroid
-            c = max(contours, key=cv2.contourArea)
-            ((x, y), radius) = cv2.minEnclosingCircle(c)
+            x, y, radius = target_info
 
             angle_x_err = (x / cam_hor_res - 0.5) * cam_x_angle
             angle_y_err = (y / cam_ver_res - 0.5) * cam_y_angle
@@ -86,6 +81,21 @@ class Worker:
             self._update_cam(x_err, y_err)
 
             self._move()
+
+    def _get_target_circle_info(self, hsv):
+        mask = self._get_target_mask(hsv)
+        # img = self.image // 4
+        contours = self._get_contours(mask)
+
+        if len(contours) == 0:
+            return None
+
+        # find the largest contour in the mask, then use
+        # it to compute the minimum enclosing circle and
+        # centroid
+        c = max(contours, key=cv2.contourArea)
+        ((x, y), radius) = cv2.minEnclosingCircle(c)
+        return x, y, radius
 
     def _search(self):
         if self.cam_hor >= cam_hor_center:
@@ -136,7 +146,6 @@ class Worker:
         mask = cv2.dilate(mask, None, iterations=2)
 
         return mask
-
 
     @staticmethod
     def _get_contours(mask):

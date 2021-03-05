@@ -20,6 +20,8 @@ class Drive:
         if steer > steer_left:
             steer = steer_left
 
+        print(f"drive.track: steer: {steer}")
+
         self.pwm1.setPWM(14, 0, steer)
         self.motor.setSpeed(50)
         self.motor.run(Raspi_MotorHAT.FORWARD)

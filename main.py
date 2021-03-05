@@ -1,4 +1,4 @@
 from camera.worker import Worker
 
 worker = Worker()
-worker.track()
+worker.track_target()
