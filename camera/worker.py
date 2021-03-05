@@ -23,7 +23,6 @@ pwm1 = Raspi_PWM_Servo_Driver.PWM(0x70)
 pwm1.setPWMFreq(250)
 pwm1.setPWM(14, 0, 0)
 
-
 processor = Processor()
 
 
@@ -61,7 +60,7 @@ class Worker:
             self.cam_hor = cam_left
             pid_hor.reset()
         print(f"_update_cam: hor: {self.cam_hor}, ver: {self.cam_ver}")
-        pwm1.setPWM(0, 0, self.cam_ver)
+        pwm1.setPWM(0, 0, cam_down)
         pwm1.setPWM(1, 0, self.cam_hor)
 
     @debug
@@ -92,7 +91,7 @@ class Worker:
             target_x, target_y, target_radius = target_info
 
             angle_x_err = (target_x / cam_hor_res - 0.5) * cam_x_angle
-            angle_y_err = (target_y / cam_ver_res - 0.5) * cam_y_angle
+            # angle_y_err = (target_y / cam_ver_res - 0.5) * cam_y_angle
 
             x_err = -(cam_left - cam_right) * angle_x_err // 180
             # y_err = (cam_down - cam_up) * angle_y_err // 100
@@ -123,5 +122,5 @@ class Worker:
         self.drive.track(self.cam_hor - cam_hor_center)
 
     def _get_hsv(self):
-        blurred = cv2.GaussianBlur(self.image, (5, 5), 0)
+        blurred = cv2.GaussianBlur(self.image[cam_ver_res // 3:cam_ver_res, 0:cam_hor_res], (5, 5), 0)
         return cv2.cvtColor(blurred, cv2.COLOR_RGB2HSV)
