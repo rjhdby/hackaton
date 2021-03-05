@@ -1,6 +1,7 @@
 import numpy as np
 
 debug_images = True
+debug_images_time = 0.5
 
 cam_up = 700
 cam_down = 1500
@@ -36,7 +37,7 @@ lower_red1 = np.array([165, 110, 110])
 upper_red1 = np.array([180, 255, 255])
 
 target_low_color = [50, 200, 50]
-target_high_color = [255, 255, 255]
+target_high_color = [240, 255, 240]
 
 floor_low_color = [20, 20, 20]
 floor_high_color = [150, 150, 150]
