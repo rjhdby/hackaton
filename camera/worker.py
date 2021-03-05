@@ -66,7 +66,9 @@ class Worker:
 
             hsv = self._get_hsv()
 
-            target_info = self._get_target_circle_info(hsv)
+            target_mask = self._get_mask(hsv, target_low_color, target_high_color)
+            target_info = self._get_contours_circle_info(target_mask)
+            print(f"target circle info x, y, r {target_info}")
             if target_info is None:
                 self.drive.stop()
                 pid_ver.reset()
@@ -74,10 +76,18 @@ class Worker:
                 self._search()
                 continue
 
-            x, y, radius = target_info
+            floor_mask = self._get_mask(hsv, floor_low_color, floor_high_color)
+            floor_info = self._get_contours_circle_info(floor_mask)
+            print(f"floor circle info x, y, r {floor_info}")
 
-            angle_x_err = (x / cam_hor_res - 0.5) * cam_x_angle
-            angle_y_err = (y / cam_ver_res - 0.5) * cam_y_angle
+            wall_mask = self._get_mask(hsv, wall_low_color, wall_high_color)
+            wall_info = self._get_contours_circle_info(wall_mask)
+            print(f"wall circle info x, y, r {wall_info}")
+
+            target_x, target_y, target_radius = target_info
+
+            angle_x_err = (target_x / cam_hor_res - 0.5) * cam_x_angle
+            angle_y_err = (target_y / cam_ver_res - 0.5) * cam_y_angle
 
             x_err = -(cam_left - cam_right) * angle_x_err // 180
             y_err = (cam_down - cam_up) * angle_y_err // 100
@@ -111,9 +121,8 @@ class Worker:
         return cv2.cvtColor(blurred, cv2.COLOR_RGB2HSV)
 
     @staticmethod
-    def _get_target_circle_info(hsv):
-        mask = Worker._get_target_mask(hsv)
-        # img = self.image // 4
+    def _get_contours_circle_info(mask):
+
         contours = Worker._get_contours(mask)
 
         if len(contours) == 0:
@@ -141,9 +150,9 @@ class Worker:
         return mask
 
     @staticmethod
-    def _get_target_mask(hsv):
-        lower_color = np.array(target_low_color)
-        upper_color = np.array(target_high_color)
+    def _get_mask(hsv, low_color, high_color):
+        lower_color = np.array(low_color)
+        upper_color = np.array(high_color)
 
         mask = cv2.inRange(hsv, lower_color, upper_color)
 
