@@ -84,8 +84,8 @@ class Processor:
 
         mask = cv2.inRange(hsv, lower_color, upper_color)
 
-        mask = cv2.erode(mask, None, iterations=2)
-        mask = cv2.dilate(mask, None, iterations=2)
+        # mask = cv2.erode(mask, None, iterations=2)
+        # mask = cv2.dilate(mask, None, iterations=2)
 
         return mask
 
