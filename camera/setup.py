@@ -1,7 +1,7 @@
 import numpy as np
 
 debug_images = True
-debug_images_time = 0.5
+debug_images_time = 1
 
 cam_up = 700
 cam_down = 1500

@@ -6,6 +6,7 @@ import time
 from camera.setup import *
 
 from pathlib import Path
+from matplotlib import pyplot as plt
 
 debug_images_path = "./images"
 
@@ -40,10 +41,12 @@ class Processor:
                                (0, 255, 255), 2)
                     cv2.circle(img, center, 5, (0, 0, 255), -1)
 
-                img = img.copy()
-                img[:, :, 0] = mask
+                img_new = img.copy()
+                img_new[:, :, 0] = mask
 
-                cv2.imwrite(f"{self.run_path}/image+mask_{len(os.listdir(self.run_path))}.jpg", img)
+                cv2.imwrite(f"{self.run_path}/image+mask_{len(os.listdir(self.run_path))}.jpg", img_new)
+                plt.imshow(img_new)
+                plt.show()
             except Exception as e:
                 print(e)
 
