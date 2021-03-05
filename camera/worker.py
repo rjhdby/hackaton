@@ -11,9 +11,11 @@ import cv2
 from matplotlib import pyplot as plt
 from matplotlib.colors import hsv_to_rgb
 import imutils
+
 from camera.drive import Drive
 from camera.setup import *
 from camera.utils import debug
+from camera.image_processing import *
 
 pid_ver = PID(0.3, 0.02, 0.01, setpoint=0, output_limits=(-200, 200))
 pid_hor = PID(0.3, 0.02, 0.01, setpoint=0, output_limits=(-200, 200))
@@ -66,8 +68,8 @@ class Worker:
 
             hsv = self._get_hsv()
 
-            target_mask = self._get_mask(hsv, target_low_color, target_high_color)
-            target_info = self._get_contours_circle_info(target_mask)
+            target_mask = get_mask(hsv, target_low_color, target_high_color)
+            target_info = get_contours_circle_info(target_mask)
             print(f"target circle info x, y, r {target_info}")
             if target_info is None:
                 self.drive.stop()
@@ -76,12 +78,12 @@ class Worker:
                 self._search()
                 continue
 
-            floor_mask = self._get_mask(hsv, floor_low_color, floor_high_color)
-            floor_info = self._get_contours_circle_info(floor_mask)
+            floor_mask = get_mask(hsv, floor_low_color, floor_high_color)
+            floor_info = get_contours_circle_info(floor_mask)
             print(f"floor circle info x, y, r {floor_info}")
 
-            wall_mask = self._get_mask(hsv, wall_low_color, wall_high_color)
-            wall_info = self._get_contours_circle_info(wall_mask)
+            wall_mask = get_mask(hsv, wall_low_color, wall_high_color)
+            wall_info = get_contours_circle_info(wall_mask)
             print(f"wall circle info x, y, r {wall_info}")
 
             target_x, target_y, target_radius = target_info
@@ -119,50 +121,3 @@ class Worker:
     def _get_hsv(self):
         blurred = cv2.GaussianBlur(self.image, (5, 5), 0)
         return cv2.cvtColor(blurred, cv2.COLOR_RGB2HSV)
-
-    @staticmethod
-    def _get_contours_circle_info(mask):
-
-        contours = Worker._get_contours(mask)
-
-        if len(contours) == 0:
-            return None
-
-        # find the largest contour in the mask, then use
-        # it to compute the minimum enclosing circle and
-        # centroid
-        c = max(contours, key=cv2.contourArea)
-        ((x, y), radius) = cv2.minEnclosingCircle(c)
-        return x, y, radius
-
-    @staticmethod
-    def _get_test_mask(hsv):
-        # lower mask (0-10)
-        mask0 = cv2.inRange(hsv, lower_red0, upper_red0)
-        # upper mask (170-180)
-        mask1 = cv2.inRange(hsv, lower_red1, upper_red1)
-
-        mask = mask0 + mask1
-
-        mask = cv2.erode(mask, None, iterations=2)
-        mask = cv2.dilate(mask, None, iterations=2)
-
-        return mask
-
-    @staticmethod
-    def _get_mask(hsv, low_color, high_color):
-        lower_color = np.array(low_color)
-        upper_color = np.array(high_color)
-
-        mask = cv2.inRange(hsv, lower_color, upper_color)
-
-        mask = cv2.erode(mask, None, iterations=2)
-        mask = cv2.dilate(mask, None, iterations=2)
-
-        return mask
-
-    @staticmethod
-    def _get_contours(mask):
-        contours = cv2.findContours(mask.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-        print(f"found number of contours: {len(contours)}")
-        return imutils.grab_contours(contours)
