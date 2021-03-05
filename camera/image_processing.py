@@ -2,6 +2,8 @@ import cv2
 import imutils
 import os
 import time
+from dataclasses import dataclass
+from typing import Optional
 
 from camera.setup import *
 
@@ -12,12 +14,19 @@ import numpy as np
 debug_images_path = "./images"
 
 
+@dataclass
+class ContourInfo:
+    x: float
+    y: float
+    radius: float
+
+
 class Processor:
     _last_debug_time = time.time()
     run_path = f"{debug_images_path}/run_{len(os.listdir(debug_images_path))}"
     Path(run_path).mkdir(parents=True, exist_ok=True)
 
-    def get_contours_circle_info(self, mask, img=None):
+    def get_contours_circle_info(self, mask, img=None) -> Optional[ContourInfo]:
         contours = self.get_contours(mask)
 
         if len(contours) == 0:
@@ -50,7 +59,7 @@ class Processor:
             except Exception as e:
                 print(e)
 
-        return x, y, radius
+        return ContourInfo(x, y, radius)
 
     def save_image(self, prefix, img):
         try:

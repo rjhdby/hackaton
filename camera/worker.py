@@ -14,6 +14,7 @@ import imutils
 
 from camera.drive import Drive
 from camera.setup import *
+from camera.states import States
 from camera.utils import debug
 from camera.image_processing import *
 
@@ -89,10 +90,8 @@ class Worker:
             wall_info = processor.get_contours_circle_info(wall_mask, self.image)
             print(f"wall circle info x, y, r {wall_info}")
 
-            target_x, target_y, target_radius = target_info
-
-            angle_x_err = (target_x / cam_hor_res - 0.5) * cam_x_angle
-            # angle_y_err = (target_y / cam_ver_res - 0.5) * cam_y_angle
+            angle_x_err = (target_info.x / cam_hor_res - 0.5) * cam_x_angle
+            # angle_y_err = (target_info.y / cam_ver_res - 0.5) * cam_y_angle
 
             x_err = -(cam_left - cam_right) * angle_x_err // 180
             # y_err = (cam_down - cam_up) * angle_y_err // 100
@@ -115,14 +114,6 @@ class Worker:
         pid_hor.reset()
         pwm1.setPWM(1, 0, self.cam_hor)
 
-    def _is_low_floor_area(self, floor_info):
-        """маленькая площадь пола"""
-        if floor_info is not None:
-            x, y, radius = floor_info
-            if radius > low_floor_radius:
-                return False
-        return True
-
     @debug
     def _move(self):
         if abs(self.cam_hor - cam_hor_center) < cam_hor_confidence:
@@ -134,5 +125,21 @@ class Worker:
 class StatePredictor:
 
     @staticmethod
-    def predict():
-        pass
+    def _is_low_floor_area(floor_info):
+        """маленькая площадь пола"""
+        if floor_info is not None:
+            if floor_info.radius > low_floor_radius:
+                return False
+        return True
+
+    @staticmethod
+    def predict(target_info, floor_info, wall_info) -> States:
+        if target_info is not None:
+            return States.SEE_TARGET
+
+        low_floor = StatePredictor._is_low_floor_area(floor_info)
+        if low_floor and wall_info is not None:
+            return States.SEE_WAll
+
+        if not low_floor:
+            return States.SEE_FLOOR
