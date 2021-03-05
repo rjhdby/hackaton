@@ -1,5 +1,7 @@
 import numpy as np
 
+debug_images = True
+
 cam_up = 700
 cam_down = 1500
 cam_left = 2300
