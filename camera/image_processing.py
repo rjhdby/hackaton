@@ -53,12 +53,15 @@ class Processor:
         return x, y, radius
 
     def save_image(self, prefix, img):
-        if debug_images:
-            path = f"{self.run_path}/{prefix}"
-            Path(path).mkdir(parents=True, exist_ok=True)
-            cv2.imwrite(f"{path}/{len(os.listdir(path))}.jpg", img)
-            plt.imshow(img)
-            plt.show()
+        try:
+            if debug_images:
+                path = f"{self.run_path}/{prefix}"
+                Path(path).mkdir(parents=True, exist_ok=True)
+                cv2.imwrite(f"{path}/{len(os.listdir(path))}.jpg", img)
+                plt.imshow(img)
+                plt.show()
+        except Exception as e:
+            print(e)
 
     @staticmethod
     def get_test_mask(hsv):

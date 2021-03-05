@@ -36,14 +36,14 @@ upper_red0 = np.array([15, 255, 255])
 lower_red1 = np.array([165, 110, 110])
 upper_red1 = np.array([180, 255, 255])
 
-target_low_color = [50, 200, 50]
-target_high_color = [130, 255, 180]
+target_low_color = [50, 100, 100]  # hsv !
+target_high_color = [75, 255, 255]
 
-floor_low_color = [20, 20, 20]
-floor_high_color = [150, 150, 150]
+floor_low_color = [0, 4, 4]
+floor_high_color = [255, 30, 30]
 
-wall_low_color = [180, 50, 50]
-wall_high_color = [255, 255, 255]
+wall_low_color = [6, 180, 100]
+wall_high_color = [12, 255, 255]
 
 # AREA METRICS
 

@@ -23,7 +23,7 @@ class Drive:
         print(f"drive.track: steer: {steer}")
 
         self.pwm1.setPWM(14, 0, steer)
-        self.motor.setSpeed(50)
+        # self.motor.setSpeed(50)
         self.motor.run(Raspi_MotorHAT.FORWARD)
 
     def stop(self):

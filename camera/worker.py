@@ -68,8 +68,7 @@ class Worker:
         for _ in self.camera.capture_continuous(self.image, format='rgb', use_video_port=True):
             clear_output(wait=True)
 
-            img = self._only_green_color(self.image)
-            hsv = self._get_hsv(img)
+            hsv = self._get_hsv(self.image)
 
             target_mask = processor.get_mask(hsv, target_low_color, target_high_color)
             target_info = processor.get_contours_circle_info(target_mask, self.image)
@@ -100,23 +99,6 @@ class Worker:
             self._update_cam(x_err, 0)
 
             self._move()
-
-    def _only_green_color(self, image):
-        image = image.copy()
-        for rows in image:
-            for column in rows:
-                for pixel in column:
-                    red = pixel[0]
-                    blue = pixel[2]
-                    other_avg = (red + blue) // 2
-                    threshold = 20
-
-                    green = pixel[1]
-                    pixel[1] = 255 if green - other_avg > threshold and green > 120 else 0
-                    pixel[0] = 0
-                    pixel[2] = 0
-        processor.save_image("green_filter", image)
-        return image
 
     def _search(self):
         if self.cam_hor >= cam_hor_center:
@@ -150,4 +132,6 @@ class Worker:
     def _get_hsv(self, img):
         img = img.copy()
         blurred = cv2.GaussianBlur(img[cam_ver_res // 3:cam_ver_res, 0:cam_hor_res], (3, 3), 0)
-        return cv2.cvtColor(blurred, cv2.COLOR_RGB2HSV)
+        img = cv2.cvtColor(blurred, cv2.COLOR_RGB2HSV)
+        processor.save_image("hsv_input", img)
+        return img
