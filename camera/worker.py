@@ -114,6 +114,14 @@ class Worker:
         pid_hor.reset()
         pwm1.setPWM(1, 0, self.cam_hor)
 
+    def _is_low_floor_area(self, floor_info):
+        """маленькая площади пола"""
+        if floor_info is not None:
+            x, y, radius = floor_info
+            if radius > low_floor_radius:
+                return False
+        return True
+
     @debug
     def _move(self):
         if abs(self.cam_hor - cam_hor_center) < cam_hor_confidence:
