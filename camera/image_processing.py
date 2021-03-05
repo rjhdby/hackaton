@@ -37,7 +37,7 @@ def get_contours_circle_info(mask, img=None):
             img = img.copy()
             img[:, :, 0] = mask
 
-            cv2.imwrite(f"{debug_images_path}/image+mask_{len(os.listdir(debug_images_path))}", img)
+            cv2.imwrite(f"{debug_images_path}/image+mask_{len(os.listdir(debug_images_path))}.jpg", img)
         except Exception as e:
             print(e)
 
