@@ -36,7 +36,7 @@ upper_red0 = np.array([15, 255, 255])
 lower_red1 = np.array([165, 110, 110])
 upper_red1 = np.array([180, 255, 255])
 
-target_low_color = [50, 100, 100]  # hsv !
+target_low_color = [50, 100, 70]  # hsv !
 target_high_color = [75, 255, 255]
 
 floor_low_color = [0, 4, 4]
