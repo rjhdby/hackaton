@@ -69,7 +69,7 @@ class Worker:
             hsv = self._get_hsv()
 
             target_mask = get_mask(hsv, target_low_color, target_high_color)
-            target_info = get_contours_circle_info(target_mask)
+            target_info = get_contours_circle_info(target_mask, self.image)
             print(f"target circle info x, y, r {target_info}")
             if target_info is None:
                 self.drive.stop()
@@ -79,11 +79,11 @@ class Worker:
                 continue
 
             floor_mask = get_mask(hsv, floor_low_color, floor_high_color)
-            floor_info = get_contours_circle_info(floor_mask)
+            floor_info = get_contours_circle_info(floor_mask, self.image)
             print(f"floor circle info x, y, r {floor_info}")
 
             wall_mask = get_mask(hsv, wall_low_color, wall_high_color)
-            wall_info = get_contours_circle_info(wall_mask)
+            wall_info = get_contours_circle_info(wall_mask, self.image)
             print(f"wall circle info x, y, r {wall_info}")
 
             target_x, target_y, target_radius = target_info

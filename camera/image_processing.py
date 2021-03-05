@@ -6,7 +6,7 @@ from camera.setup import *
 
 from pathlib import Path
 
-debug_images_path = "./images/"
+debug_images_path = "./images"
 Path(debug_images_path).mkdir(parents=True, exist_ok=True)
 
 
@@ -23,21 +23,23 @@ def get_contours_circle_info(mask, img=None):
     ((x, y), radius) = cv2.minEnclosingCircle(c)
 
     if debug_images and img:
+        try:
+            M = cv2.moments(c)
+            center = (int(M["m10"] / M["m00"]), int(M["m01"] / M["m00"]))
+            # only proceed if the radius meets a minimum size
+            if radius > 2:
+                # draw the circle and centroid on the frame,
+                # then update the list of tracked points
+                cv2.circle(img, (int(x), int(y)), int(radius),
+                           (0, 255, 255), 2)
+                cv2.circle(img, center, 5, (0, 0, 255), -1)
 
-        M = cv2.moments(c)
-        center = (int(M["m10"] / M["m00"]), int(M["m01"] / M["m00"]))
-        # only proceed if the radius meets a minimum size
-        if radius > 2:
-            # draw the circle and centroid on the frame,
-            # then update the list of tracked points
-            cv2.circle(img, (int(x), int(y)), int(radius),
-                       (0, 255, 255), 2)
-            cv2.circle(img, center, 5, (0, 0, 255), -1)
+            img = img.copy()
+            img[:, :, 0] = mask
 
-        img = img.copy()
-        img[:, :, 0] = mask
-
-        cv2.imwrite(f"image+mask_{len(os.listdir(debug_images_path))}", img)
+            cv2.imwrite(f"{debug_images_path}/image+mask_{len(os.listdir(debug_images_path))}", img)
+        except Exception as e:
+            print(e)
 
     return x, y, radius
 
