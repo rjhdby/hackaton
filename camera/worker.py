@@ -172,6 +172,7 @@ class Worker:
         if self.search == -1:
             self.search = 0
             self.drive.set_to_center()
+            pid_hor.reset()
             pwm1.setPWM(1, 0, cam_hor_center)
             return
 
