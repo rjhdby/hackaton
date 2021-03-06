@@ -2,6 +2,6 @@ from camera.worker import Worker
 
 worker = Worker()
 try:
-    worker.track_target()
+    worker.start_hunting()
 except KeyboardInterrupt:
     worker.shutdown()
