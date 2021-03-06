@@ -30,7 +30,7 @@ class StatePredictor:
     @debug
     def predict(target_info, floor_info, wall_info, prev_target_radius, prev_wall_radius) -> States:
 
-        if target_info is not None and wall_info is not None:
+        if target_info is not None and wall_info is not None and target_info.radius < cam_ver_res / 3:
             target_change = abs(prev_target_radius - target_info.radius)
             wall_change = abs(prev_wall_radius - wall_info.radius)
 
