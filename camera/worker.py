@@ -64,41 +64,6 @@ class Worker:
         pwm1.setPWM(1, 0, self.cam_hor)
 
     @debug
-    def track_target(self):
-        for _ in self.camera.capture_continuous(self.image, format='rgb', use_video_port=True):
-            clear_output(wait=True)
-
-            hsv = processor.input_to_hsv(processor, self.image)
-
-            target_mask = processor.get_mask(hsv, target_low_color, target_high_color)
-            # processor.save_image("target_mask", target_mask)
-            target_info = processor.get_contours_circle_info(target_mask, self.image)
-            print(f"target circle info x, y, r {target_info}")
-            if target_info is None:
-                self.drive.stop()
-                pid_ver.reset()
-                pid_ver.reset()
-                self._search()
-                continue
-
-            floor_mask = processor.get_mask(hsv, floor_low_color, floor_high_color)
-            floor_info = processor.get_contours_circle_info(floor_mask, self.image)
-            print(f"floor circle info x, y, r {floor_info}")
-
-            wall_mask = processor.get_mask(hsv, wall_low_color, wall_high_color)
-            wall_info = processor.get_contours_circle_info(wall_mask, self.image)
-            print(f"wall circle info x, y, r {wall_info}")
-            angle_x_err = (target_info.x / cam_hor_res - 0.5) * cam_x_angle
-            # angle_y_err = (target_info.y / cam_ver_res - 0.5) * cam_y_angle
-
-            x_err = -(cam_left - cam_right) * angle_x_err // 180
-            # y_err = (cam_down - cam_up) * angle_y_err // 100
-
-            self._update_cam(x_err, 0)
-
-            self._move(target_info.radius)
-
-    @debug
     def get_objects_info(self, hsv):
         target_mask = processor.get_mask(hsv, target_low_color, target_high_color)
         processor.save_image("target_mask", target_mask)
@@ -133,6 +98,8 @@ class Worker:
             if current_state == States.SEE_TARGET:
                 self.attack(target_info)
                 continue
+
+            self.center_camera()
 
             if current_state == States.SEE_WAll and self.search < 1:
                 # выруливаем пока случайно
@@ -175,6 +142,10 @@ class Worker:
         self._update_cam(x_err, 0)
         self._move(target_info.radius)
 
+    def center_camera(self):
+        pid_hor.reset()
+        pwm1.setPWM(1, 0, cam_hor_center)
+
     @debug
     def _search(self, iterations):
         if self.search == 0:
@@ -183,8 +154,7 @@ class Worker:
         if self.search == -1:
             self.search = 0
             self.drive.set_to_center()
-            pid_hor.reset()
-            pwm1.setPWM(1, 0, cam_hor_center)
+            self.center_camera()
             return
 
         if self.cam_hor >= cam_hor_center:
@@ -197,8 +167,7 @@ class Worker:
         if self.cam_hor < cam_right:
             self.cam_hor = cam_hor_center + 200
 
-        pid_hor.reset()
-        pwm1.setPWM(1, 0, self.cam_hor)
+        self.center_camera()
 
     @debug
     def _move(self, target_radius):
