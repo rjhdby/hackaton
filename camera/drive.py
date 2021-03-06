@@ -34,8 +34,7 @@ class Drive:
     def drive_forward_for_time(self, speed, stop_time=0.5):
         start_time = time.time()
         self.run_forward(speed)
-        while time.time() < min(start_time + stop_time, 5):
-            continue
+        time.sleep(stop_time)
         self.stop()
 
     @debug
@@ -48,8 +47,7 @@ class Drive:
     def drive_backward_for_time(self, speed, stop_time=0.5):
         start_time = time.time()
         self.run_backward(speed)
-        while time.time() < min(start_time + stop_time, 5):
-            continue
+        time.sleep(stop_time)
         self.stop()
 
     @debug
