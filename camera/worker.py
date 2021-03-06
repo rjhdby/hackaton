@@ -68,7 +68,7 @@ class Worker:
         for _ in self.camera.capture_continuous(self.image, format='rgb', use_video_port=True):
             clear_output(wait=True)
 
-            hsv = processor.input_to_hsv(self.image)
+            hsv = processor.input_to_hsv(processor, self.image)
 
             target_mask = processor.get_mask(hsv, target_low_color, target_high_color)
             # processor.save_image("target_mask", target_mask)
@@ -122,9 +122,7 @@ class Worker:
         for _ in self.camera.capture_continuous(self.image, format='rgb', use_video_port=True):
             clear_output(wait=True)
 
-            processor.save_image("input", self.image.copy())
-
-            hsv = processor.input_to_hsv(self.image)
+            hsv = processor.input_to_hsv(processor, self.image)
 
             info = self.get_objects_info(hsv)
             target_info, floor_info, wall_info = info
