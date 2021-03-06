@@ -1,10 +1,12 @@
 from camera.setup import low_floor_radius
 from camera.states import States
+from camera.utils import debug
 
 
 class StatePredictor:
 
     @staticmethod
+    @debug
     def _is_low_floor_area(floor_info):
         """маленькая площадь пола"""
         if floor_info is not None:
@@ -13,6 +15,7 @@ class StatePredictor:
         return True
 
     @staticmethod
+    @debug
     def predict(target_info, floor_info, wall_info) -> States:
         if target_info is not None:
             return States.SEE_TARGET
