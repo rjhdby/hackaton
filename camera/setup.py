@@ -61,7 +61,7 @@ floor_go_time = 0.9
 wall_back_speed = [37, 45]
 wall_back_time = 0.9
 
-slowdown_time = 0.3
+slowdown_time = 0.2
 
 search_on_proba = 0.1
 random_floor_back = 0.05
