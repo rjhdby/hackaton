@@ -78,7 +78,6 @@ class Processor:
     def input_to_hsv(img):
         img = img.copy()
         blurred = cv2.GaussianBlur(img, (3, 3), 0)
-        # processor.save_image("input", blurred)
         img = cv2.cvtColor(blurred, cv2.COLOR_RGB2HSV)
         # processor.save_image("hsv_input", img)
         return img

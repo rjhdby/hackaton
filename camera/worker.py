@@ -111,7 +111,7 @@ class Worker:
         print(f"floor circle info x, y, r {floor_info}")
 
         wall_mask = processor.get_mask(hsv, wall_low_color, wall_high_color)
-        processor.save_image("wall_mask", floor_mask)
+        processor.save_image("wall_mask", wall_mask)
         wall_info = processor.get_contours_circle_info(wall_mask, self.image)
         print(f"wall circle info x, y, r {wall_info}")
 
@@ -121,6 +121,8 @@ class Worker:
     def start_hunting(self):
         for _ in self.camera.capture_continuous(self.image, format='rgb', use_video_port=True):
             clear_output(wait=True)
+
+            processor.save_image("input", self.image.copy())
 
             hsv = processor.input_to_hsv(self.image)
 
