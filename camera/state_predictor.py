@@ -24,7 +24,7 @@ class StatePredictor:
             return States.SEE_TARGET
 
         low_floor = StatePredictor._is_low_floor_area(floor_info)
-        if (low_floor and wall_info is not None) or distance.is_distance_low_threshold():
+        if (low_floor and wall_info is not None):
             return States.SEE_WAll
 
         if not low_floor:
