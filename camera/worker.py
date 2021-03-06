@@ -95,7 +95,10 @@ class Worker:
             info = self.get_objects_info(hsv)
             target_info, floor_info, wall_info = info
 
-            current_state = state_predictor.predict(target_info, floor_info, wall_info)
+            current_state = state_predictor.predict(target_info, floor_info, wall_info, self.prev_target_radius,
+                                                    self.prev_wall_radius)
+            self.prev_target_radius = target_info.radius
+            self.prev_wall_radius = wall_info.radius
             print(f"CURRENT STATE {current_state}")
 
             if current_state == States.BLOCKED:
