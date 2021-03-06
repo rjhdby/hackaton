@@ -26,11 +26,11 @@ class StatePredictor:
     @staticmethod
     @debug
     def predict(target_info, floor_info, wall_info) -> States:
-        if target_info is not None:
-            return States.SEE_TARGET
-
         wall_near = StatePredictor._wall_is_near(wall_info)
         if wall_near:
             return States.SEE_WAll
+
+        if target_info is not None:
+            return States.SEE_TARGET
 
         return States.SEE_FLOOR

@@ -142,6 +142,12 @@ class Worker:
                 # двигаться немного прямо
                 self.drive.set_steer(steer_center)
                 self.drive.drive_forward_for_time(speed=floor_go_speed, stop_time=floor_go_time)
+                # торможение
+                time.sleep(slowdown_time)
+                # randomный поиск
+                if random.random() < search_on_proba:
+                    self._search()
+                    self._search()
                 continue
 
             # искать но не должно сюда дойти по идее
