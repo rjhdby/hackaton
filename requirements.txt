@@ -9,3 +9,4 @@ opencv-python
 matplotlib
 imutils
 simple_pid
+RPi.GPIO
