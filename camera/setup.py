@@ -4,7 +4,7 @@ debug_images = True
 debug_images_time = 1
 
 cam_up = 700
-cam_down = 1500
+cam_down = 1700
 cam_left = 2650
 cam_right = 600
 
