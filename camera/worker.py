@@ -129,17 +129,20 @@ class Worker:
 
             if current_state == States.SEE_TARGET:
                 self.attack(target_info)
+                continue
 
             if current_state == States.SEE_WAll:
                 # выруливаем пока случайно
                 self.drive.set_random_steer()
                 # сдаем назад
                 self.drive.drive_backward_for_time(speed=wall_back_speed, stop_time=wall_back_time)
+                continue
 
             if current_state == States.SEE_FLOOR:
                 # двигаться немного прямо
                 self.drive.set_steer(steer_center)
                 self.drive.drive_forward_for_time(speed=floor_go_speed, stop_time=floor_go_time)
+                continue
 
             # искать но не должно сюда дойти по идее
             self._search()
