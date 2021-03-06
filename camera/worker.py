@@ -101,15 +101,17 @@ class Worker:
     @debug
     def get_objects_info(self, hsv):
         target_mask = processor.get_mask(hsv, target_low_color, target_high_color)
-        # processor.save_image("target_mask", target_mask)
+        processor.save_image("target_mask", target_mask)
         target_info = processor.get_contours_circle_info(target_mask, self.image)
         print(f"target circle info x, y, r {target_info}")
 
         floor_mask = processor.get_mask(hsv, floor_low_color, floor_high_color)
+        processor.save_image("floor_mask", floor_mask)
         floor_info = processor.get_contours_circle_info(floor_mask, self.image)
         print(f"floor circle info x, y, r {floor_info}")
 
         wall_mask = processor.get_mask(hsv, wall_low_color, wall_high_color)
+        processor.save_image("wall_mask", floor_mask)
         wall_info = processor.get_contours_circle_info(wall_mask, self.image)
         print(f"wall circle info x, y, r {wall_info}")
 
