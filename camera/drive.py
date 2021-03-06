@@ -2,6 +2,9 @@ from Raspi_MotorHAT import Raspi_MotorHAT
 from Raspi_MotorHAT import Raspi_PWM_Servo_Driver
 from camera.setup import *
 import time
+import random
+
+from camera.utils import debug
 
 
 class Drive:
@@ -11,6 +14,7 @@ class Drive:
     def __init__(self):
         self.pwm1.setPWM(14, 0, steer_center)
 
+    @debug
     def track(self, deviation):
         steer = steer_center + int(deviation * steer_to_cam_multiplier)
         if abs(steer - steer_center) < steer_confidence:
@@ -24,24 +28,47 @@ class Drive:
         print(f"drive.track: steer: {steer}")
 
         self.set_steer(steer)
-        self.run(50)
+        self.run_forward(50)
 
-    def drive_for_time(self, speed, stop_time=0.5):
+    @debug
+    def drive_forward_for_time(self, speed, stop_time=0.5):
         start_time = time.time()
-        self.run(speed)
+        self.run_forward(speed)
         while time.time() < min(start_time + stop_time, 5):
             continue
         self.stop()
 
-    def run(self, speed):
-        print ("RUN!!!")
+    @debug
+    def run_forward(self, speed):
+        print("RUN!!!")
         self.motor.setSpeed(speed)
-        self.motor.run(Raspi_MotorHAT.FORWARD)
+        self.motor.run_forward(Raspi_MotorHAT.FORWARD)
 
+    @debug
+    def drive_backward_for_time(self, speed, stop_time=0.5):
+        start_time = time.time()
+        self.run_backward(speed)
+        while time.time() < min(start_time + stop_time, 5):
+            continue
+        self.stop()
+
+    @debug
+    def run_backward(self, speed):
+        print("RUN BACK!!!")
+        self.motor.setSpeed(speed)
+        self.motor.run_forward(Raspi_MotorHAT.BACKWARD)
+
+    @debug
     def stop(self):
         self.motor.MC.setPin(self.motor.IN1pin, 1)
         self.motor.MC.setPin(self.motor.IN2pin, 1)
         self.set_steer(steer_center)
 
+    @debug
+    def set_random_steer(self):
+        steer = random.sample([steer_center, steer_left, steer_right], k=1)[0]
+        self.set_steer(steer)
+
+    @debug
     def set_steer(self, steer):
         self.pwm1.setPWM(14, 0, steer)

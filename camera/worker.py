@@ -11,9 +11,11 @@ import cv2
 from matplotlib import pyplot as plt
 from matplotlib.colors import hsv_to_rgb
 import imutils
+import random
 
 from camera.drive import Drive
 from camera.setup import *
+from camera.state_predictor import StatePredictor
 from camera.states import States
 from camera.utils import debug
 from camera.image_processing import *
@@ -25,6 +27,7 @@ pwm1.setPWMFreq(250)
 pwm1.setPWM(14, 0, 0)
 
 processor = Processor()
+state_predictor = StatePredictor()
 
 
 class Worker:
@@ -93,6 +96,64 @@ class Worker:
 
             self._move(target_info.radius)
 
+    @debug
+    def get_objects_info(self, hsv):
+        target_mask = processor.get_mask(hsv, target_low_color, target_high_color)
+        # processor.save_image("target_mask", target_mask)
+        target_info = processor.get_contours_circle_info(target_mask, self.image)
+        print(f"target circle info x, y, r {target_info}")
+
+        floor_mask = processor.get_mask(hsv, floor_low_color, floor_high_color)
+        floor_info = processor.get_contours_circle_info(floor_mask, self.image)
+        print(f"floor circle info x, y, r {floor_info}")
+
+        wall_mask = processor.get_mask(hsv, wall_low_color, wall_high_color)
+        wall_info = processor.get_contours_circle_info(wall_mask, self.image)
+        print(f"wall circle info x, y, r {wall_info}")
+
+        return target_info, floor_info, wall_info
+
+    @debug
+    def start_hunting(self):
+        for _ in self.camera.capture_continuous(self.image, format='rgb', use_video_port=True):
+            clear_output(wait=True)
+
+            hsv = processor.input_to_hsv(self.image)
+
+            target_info, floor_info, wall_info = self.get_objects_info(hsv)
+
+            current_state = state_predictor.predict(target_info, floor_info, wall_info)
+            print("CURRENT STATE")
+
+            if current_state == States.SEE_TARGET:
+                self.attack(target_info)
+
+            if current_state == States.SEE_WAll:
+                # выруливаем пока случайно
+                self.drive.set_random_steer()
+                # сдаем назад
+                self.drive.drive_backward_for_time(speed=wall_back_speed, stop_time=wall_back_time)
+
+            if current_state == States.SEE_FLOOR:
+                # двигаться немного прямо
+                self.drive.set_steer(steer_center)
+                self.drive.drive_forward_for_time(speed=floor_go_speed, stop_time=floor_go_time)
+
+            # искать но не должно сюда дойти по идее
+            self._search()
+
+    @debug
+    def attack(self, target_info):
+        print(f"do attack for {target_info}")
+        angle_x_err = (target_info.x / cam_hor_res - 0.5) * cam_x_angle
+        # angle_y_err = (target_info.y / cam_ver_res - 0.5) * cam_y_angle
+
+        x_err = -(cam_left - cam_right) * angle_x_err // 180
+        # y_err = (cam_down - cam_up) * angle_y_err // 100
+        self._update_cam(x_err, 0)
+        self._move(target_info.radius)
+
+    @debug
     def _search(self):
         if self.cam_hor >= cam_hor_center:
             self.cam_hor += 200
@@ -117,26 +178,3 @@ class Worker:
 
     def shutdown(self):
         self.drive.stop()
-
-
-class StatePredictor:
-
-    @staticmethod
-    def _is_low_floor_area(floor_info):
-        """маленькая площадь пола"""
-        if floor_info is not None:
-            if floor_info.radius > low_floor_radius:
-                return False
-        return True
-
-    @staticmethod
-    def predict(target_info, floor_info, wall_info) -> States:
-        if target_info is not None:
-            return States.SEE_TARGET
-
-        low_floor = StatePredictor._is_low_floor_area(floor_info)
-        if low_floor and wall_info is not None:
-            return States.SEE_WAll
-
-        if not low_floor:
-            return States.SEE_FLOOR

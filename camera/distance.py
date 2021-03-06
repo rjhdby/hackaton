@@ -2,6 +2,7 @@ import RPi.GPIO as GPIO
 import time
 
 from camera.setup import distance_threshold
+from camera.utils import debug
 
 
 class Distance:
@@ -17,6 +18,7 @@ class Distance:
     def cleanup(self):
         GPIO.cleanup()
 
+    @debug
     def measure(self):
         GPIO.output(self.TRIG, 1)
         time.sleep(0.00001)
@@ -35,11 +37,13 @@ class Distance:
         return distance
 
     # Между измерениями нужно подождать немного, если использовать другие методы, то нужно решить в месте использования
+    @debug
     def measure_with_delay(self, delay=0.1):
         time.sleep(delay)
 
         return self.measure()
 
+    @debug
     def is_distance_low_threshold(self, threshold=distance_threshold):
         distance = self.measure()
 

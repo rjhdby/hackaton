@@ -67,8 +67,9 @@ class Processor:
                 path = f"{self.run_path}/{prefix}"
                 Path(path).mkdir(parents=True, exist_ok=True)
                 cv2.imwrite(f"{path}/{len(os.listdir(path))}.jpg", img)
-                plt.imshow(img)
-                plt.show()
+                if plot_images:
+                    plt.imshow(img)
+                    plt.show()
         except Exception as e:
             print(e)
 

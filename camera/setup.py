@@ -2,6 +2,7 @@ import numpy as np
 
 debug_images = True
 debug_images_time = 1
+plot_images = False
 
 cam_up = 700
 cam_down = 1700
@@ -48,5 +49,15 @@ wall_high_color = [12, 255, 255]
 # AREA METRICS
 
 low_floor_radius = 30
+
+# Speeds
+
+floor_go_speed = 10
+floor_go_time = 0.5
+
+wall_back_speed = 10
+wall_back_time = 0.5
+
+# DISTANCE MEASURE
 
 distance_threshold = 10
