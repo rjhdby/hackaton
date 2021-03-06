@@ -83,8 +83,7 @@ class Worker:
             wall_mask = processor.get_mask(hsv, wall_low_color, wall_high_color)
             wall_info = processor.get_contours_circle_info(wall_mask, self.image)
             print(f"wall circle info x, y, r {wall_info}")
-            x, y, r = target_info
-            angle_x_err = (x / cam_hor_res - 0.5) * cam_x_angle
+            angle_x_err = (target_info.x / cam_hor_res - 0.5) * cam_x_angle
             # angle_y_err = (target_info.y / cam_ver_res - 0.5) * cam_y_angle
 
             x_err = -(cam_left - cam_right) * angle_x_err // 180
