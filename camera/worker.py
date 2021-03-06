@@ -121,7 +121,9 @@ class Worker:
 
             hsv = processor.input_to_hsv(self.image)
 
-            target_info, floor_info, wall_info = self.get_objects_info(hsv)
+            result = self.get_objects_info(hsv)
+            print(result)
+            target_info, floor_info, wall_info = result
 
             current_state = state_predictor.predict(target_info, floor_info, wall_info)
             print("CURRENT STATE")
