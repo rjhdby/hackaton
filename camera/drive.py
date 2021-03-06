@@ -28,7 +28,7 @@ class Drive:
         print(f"drive.track: steer: {steer}")
 
         self.set_steer(steer)
-        self.run_forward(50)
+        self.run_forward(attack_speed)
 
     @debug
     def drive_forward_for_time(self, speed, stop_time=0.5):
