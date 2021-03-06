@@ -35,7 +35,7 @@ class StatePredictor:
             return wall_info.y > wall_max_dist
 
     @debug
-    def predict(self, target_info, floor_info, wall_info) -> States:
+    def predict(self, target_info, wall_info) -> States:
 
         if target_info is not None and wall_info is not None and target_info.radius < cam_ver_res / 3:
             max_change_target = max(abs(self.target_r - target_info.radius), abs(self.target_x-target_info.x), abs(self.target_y-target_info.x))

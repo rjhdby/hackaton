@@ -73,4 +73,4 @@ attack_speed = 50
 # DISTANCE MEASURE
 
 distance_threshold = 10
-block_threshold = 2
+block_threshold = 5

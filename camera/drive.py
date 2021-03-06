@@ -33,7 +33,8 @@ class Drive:
     @debug
     def drive_forward_for_time(self, speed, stop_time=0.5):
         self.run_forward(speed)
-        time.sleep(stop_time)
+        if time != 0:
+            time.sleep(stop_time)
         self.stop()
 
     @debug

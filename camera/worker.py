@@ -42,6 +42,8 @@ class Worker:
     search = 0
     steer = steer_right
 
+    roaming = 10
+
     def __init__(self):
         self._update_cam(0, 0)
         self.camera.resolution = (cam_hor_res, cam_ver_res)
@@ -71,17 +73,17 @@ class Worker:
         target_info = processor.get_contours_circle_info(target_mask, self.image)
         print(f"target circle info x, y, r {target_info}")
 
-        floor_mask = processor.get_mask(hsv, floor_low_color, floor_high_color)
-        processor.save_image("floor_mask", floor_mask)
-        floor_info = processor.get_contours_circle_info(floor_mask, self.image)
-        print(f"floor circle info x, y, r {floor_info}")
+        # floor_mask = processor.get_mask(hsv, floor_low_color, floor_high_color)
+        # processor.save_image("floor_mask", floor_mask)
+        # floor_info = processor.get_contours_circle_info(floor_mask, self.image)
+        # print(f"floor circle info x, y, r {floor_info}")
 
         wall_mask = processor.get_mask(hsv, wall_low_color, wall_high_color)
         processor.save_image("wall_mask", wall_mask)
         wall_info = processor.get_contours_circle_info(wall_mask, self.image)
         print(f"wall circle info x, y, r {wall_info}")
 
-        return target_info, floor_info, wall_info
+        return target_info, wall_info
 
     @debug
     def start_hunting(self):
@@ -91,9 +93,9 @@ class Worker:
             hsv = processor.input_to_hsv(processor, self.image)
 
             info = self.get_objects_info(hsv)
-            target_info, floor_info, wall_info = info
+            target_info, wall_info = info
 
-            current_state = state_predictor.predict(target_info, floor_info, wall_info)
+            current_state = state_predictor.predict(target_info, wall_info)
             if target_info is not None:
                 self.prev_target_radius = target_info.radius
             if wall_info is not None:
@@ -113,7 +115,14 @@ class Worker:
 
             self.center_camera()
 
-            if current_state == States.SEE_WAll and self.search < 1:
+            if self.roaming > 10 or self.search > 1:
+                self._search(8)
+                self.roaming = 0
+                continue
+
+            self.roaming += 1
+
+            if current_state == States.SEE_WAll:
                 # выруливаем пока случайно
                 # self.drive.set_random_steer()
                 self.drive.set_steer(self.steer)
@@ -137,7 +146,8 @@ class Worker:
 
                 # двигаться немного прямо
                 self.drive.set_steer(steer_center)
-                self.drive.drive_forward_for_time(speed=floor_go_speed, stop_time=floor_go_time)
+                # self.drive.drive_forward_for_time(speed=floor_go_speed, stop_time=floor_go_time)
+                self.drive.drive_forward_for_time(speed=floor_go_speed, stop_time=0)
                 # торможение
                 time.sleep(slowdown_time)
                 # randomный поиск
@@ -188,7 +198,7 @@ class Worker:
 
     @debug
     def _move(self, target_radius):
-        if target_radius > cam_ver_res / 3:
+        if target_radius != 0 and target_radius > cam_ver_res / 3:
             print ("STOP!!!")
             self.drive.stop()
             return
