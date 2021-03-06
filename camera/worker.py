@@ -91,7 +91,7 @@ class Worker:
 
             self._update_cam(x_err, 0)
 
-            self._move()
+            self._move(target_info.radius)
 
     def _search(self):
         if self.cam_hor >= cam_hor_center:
