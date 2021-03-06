@@ -110,7 +110,7 @@ class Worker:
     @debug
     def _move(self, target_radius):
         if target_radius > cam_ver_res / 3:
-            print "STOP!!!"
+            print ("STOP!!!")
             self.drive.stop()
             return
         self.drive.track(self.cam_hor - cam_hor_center)
