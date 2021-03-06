@@ -113,8 +113,8 @@ class Worker:
                 self.attack(target_info)
                 continue
 
-            self.center_camera()
-
+            if self.search == 0:
+                self.center_camera()
             if self.roaming > 10 or self.search > 1:
                 self._search(8)
                 self.roaming = 0
