@@ -48,3 +48,5 @@ wall_high_color = [12, 255, 255]
 # AREA METRICS
 
 low_floor_radius = 30
+
+distance_threshold = 10
