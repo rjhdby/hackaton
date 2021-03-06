@@ -17,9 +17,6 @@ class Drive:
     @debug
     def track(self, deviation):
         steer = steer_center + int(deviation * steer_to_cam_multiplier)
-        if abs(steer - steer_center) < steer_confidence:
-            self.stop()
-            return
         if steer < steer_right:
             steer = steer_right
         if steer > steer_left:

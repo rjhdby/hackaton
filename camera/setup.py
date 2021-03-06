@@ -65,7 +65,7 @@ slowdown_time = 0.3
 
 search_on_proba = 0.1
 
-attack_speed = 40
+attack_speed = 50
 
 # DISTANCE MEASURE
 
