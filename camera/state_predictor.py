@@ -29,12 +29,14 @@ class StatePredictor:
     @staticmethod
     @debug
     def predict(target_info, floor_info, wall_info, prev_target_radius, prev_wall_radius) -> States:
-        target_change = abs(prev_target_radius - target_info.radius)
-        wall_change = abs(prev_wall_radius - wall_info.radius)
 
-        if target_change < block_threshold and wall_change < block_threshold:
-            print("BLOCKED!!!")
-            return States.BLOCKED
+        if target_info is not None and wall_info is not None:
+            target_change = abs(prev_target_radius - target_info.radius)
+            wall_change = abs(prev_wall_radius - wall_info.radius)
+
+            if target_change < block_threshold and wall_change < block_threshold:
+                print("BLOCKED!!!")
+                return States.BLOCKED
 
         if target_info is not None:
             print("TARGET!!!")
