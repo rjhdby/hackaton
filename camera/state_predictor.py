@@ -21,7 +21,7 @@ class StatePredictor:
     @staticmethod
     @debug
     def _wall_is_near(wall_info: ContourInfo):
-        return wall_info.x < wall_max_dist
+        return wall_info.y < wall_max_dist
 
     @staticmethod
     @debug
