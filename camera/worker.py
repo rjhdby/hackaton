@@ -46,21 +46,15 @@ class Worker:
 
     @debug
     def _update_cam(self, err_hor, err_ver, dt=None):
-        self.cam_ver += int(pid_ver(-err_ver, dt))
         self.cam_hor += int(pid_hor(-err_hor, dt))
-        if self.cam_ver < cam_up:
-            self.cam_ver = cam_up
-            pid_ver.reset()
-        if self.cam_ver > cam_down:
-            self.cam_ver = cam_down
-            pid_ver.reset()
+
         if self.cam_hor < cam_right:
             self.cam_hor = cam_right
             pid_hor.reset()
         if self.cam_hor > cam_left:
             self.cam_hor = cam_left
             pid_hor.reset()
-        print(f"_update_cam: hor: {self.cam_hor}, ver: {self.cam_ver}")
+        # print(f"_update_cam: hor: {self.cam_hor}, ver: {self.cam_ver}")
         pwm1.setPWM(0, 0, cam_down)
         pwm1.setPWM(1, 0, self.cam_hor)
 
@@ -89,8 +83,8 @@ class Worker:
             wall_mask = processor.get_mask(hsv, wall_low_color, wall_high_color)
             wall_info = processor.get_contours_circle_info(wall_mask, self.image)
             print(f"wall circle info x, y, r {wall_info}")
-
-            angle_x_err = (target_info.x / cam_hor_res - 0.5) * cam_x_angle
+            x, y, r = target_info
+            angle_x_err = (x / cam_hor_res - 0.5) * cam_x_angle
             # angle_y_err = (target_info.y / cam_ver_res - 0.5) * cam_y_angle
 
             x_err = -(cam_left - cam_right) * angle_x_err // 180
@@ -102,21 +96,21 @@ class Worker:
 
     def _search(self):
         if self.cam_hor >= cam_hor_center:
-            self.cam_hor += 100
+            self.cam_hor += 200
         else:
-            self.cam_hor -= 100
+            self.cam_hor -= 200
 
         if self.cam_hor > cam_left:
-            self.cam_hor = cam_hor_center - 100
+            self.cam_hor = cam_hor_center - 200
         if self.cam_hor < cam_right:
-            self.cam_hor = cam_hor_center + 100
+            self.cam_hor = cam_hor_center + 200
 
         pid_hor.reset()
         pwm1.setPWM(1, 0, self.cam_hor)
 
     @debug
-    def _move(self):
-        if abs(self.cam_hor - cam_hor_center) < cam_hor_confidence:
+    def _move(self, target_radius):
+        if target_radius > cam_ver_res / 3:
             self.drive.stop()
             return
         self.drive.track(self.cam_hor - cam_hor_center)

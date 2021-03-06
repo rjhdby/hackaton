@@ -24,7 +24,7 @@ class Drive:
         print(f"drive.track: steer: {steer}")
 
         self.set_steer(steer)
-        # self.run(50)
+        self.run(50)
 
     def drive_for_time(self, speed, stop_time=0.5):
         start_time = time.time()
