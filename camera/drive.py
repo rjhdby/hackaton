@@ -32,7 +32,6 @@ class Drive:
 
     @debug
     def drive_forward_for_time(self, speed, stop_time=0.5):
-        start_time = time.time()
         self.run_forward(speed)
         time.sleep(stop_time)
         self.stop()
@@ -45,7 +44,6 @@ class Drive:
 
     @debug
     def drive_backward_for_time(self, speed, stop_time=0.5):
-        start_time = time.time()
         self.run_backward(speed)
         time.sleep(stop_time)
         self.stop()
