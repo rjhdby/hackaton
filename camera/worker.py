@@ -113,7 +113,7 @@ class Worker:
             if self.roaming > 10 or self.search > 1:
                 print (f"SEARCH {self.search}  {self.roaming}")
                 self._search(8)
-                # self.roaming = 0
+                self.roaming = 0
                 continue
 
             self.roaming += 1
