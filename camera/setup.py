@@ -53,10 +53,10 @@ low_wall_radius = 30
 # Speeds
 
 floor_go_speed = 40
-floor_go_time = 0.5
+floor_go_time = 0.4
 
 wall_back_speed = 40
-wall_back_time = 0.5
+wall_back_time = 0.4
 
 # DISTANCE MEASURE
 
