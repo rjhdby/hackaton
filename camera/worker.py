@@ -140,6 +140,14 @@ class Worker:
                 continue
 
             if current_state == States.SEE_FLOOR and self.search < 1:
+                if random.random() < random_floor_back:
+                    # но иногда сдаем назад из-за залипаний
+                    # выруливаем пока случайно
+                    self.drive.set_random_steer()
+                    # сдаем назад
+                    self.drive.drive_backward_for_time(speed=wall_back_speed, stop_time=wall_back_time)
+                    continue
+
                 # двигаться немного прямо
                 self.drive.set_steer(steer_center)
                 self.drive.drive_forward_for_time(speed=floor_go_speed, stop_time=floor_go_time)
