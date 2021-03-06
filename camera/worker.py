@@ -125,7 +125,7 @@ class Worker:
             target_info, floor_info, wall_info = info
 
             current_state = state_predictor.predict(target_info, floor_info, wall_info)
-            print("CURRENT STATE")
+            print(f"CURRENT STATE {current_state}")
 
             if current_state == States.SEE_TARGET:
                 self.attack(target_info)
