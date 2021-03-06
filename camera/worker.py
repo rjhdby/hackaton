@@ -45,7 +45,7 @@ class Worker:
     roaming = 12
 
     def __init__(self):
-        self._update_cam(0, 0)
+        self._update_cam(0)
         self.camera.resolution = (cam_hor_res, cam_ver_res)
         self.camera.framerate = 24
         self.camera.exposure_mode = 'sports'
@@ -162,7 +162,7 @@ class Worker:
 
         x_err = -(cam_left - cam_right) * angle_x_err // 180
         # y_err = (cam_down - cam_up) * angle_y_err // 100
-        self._update_cam(x_err, 0)
+        self._update_cam(x_err)
         self._move(target_info.radius)
 
     def center_camera(self):
