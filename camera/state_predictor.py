@@ -1,5 +1,5 @@
 from camera.distance import Distance
-from camera.setup import low_floor_radius
+from camera.setup import low_wall_radius
 from camera.states import States
 from camera.utils import debug
 
@@ -10,12 +10,12 @@ class StatePredictor:
 
     @staticmethod
     @debug
-    def _is_low_floor_area(floor_info):
+    def _is_big_wall_area(wall_info):
         """маленькая площадь пола"""
-        if floor_info is not None:
-            if floor_info.radius > low_floor_radius:
-                return False
-        return True
+        if wall_info is not None:
+            if wall_info.radius > low_wall_radius:
+                return True
+        return False
 
     @staticmethod
     @debug
@@ -23,9 +23,8 @@ class StatePredictor:
         if target_info is not None:
             return States.SEE_TARGET
 
-        low_floor = StatePredictor._is_low_floor_area(floor_info)
-        if (low_floor and wall_info is not None):
+        big_wall = StatePredictor._is_big_wall_area(wall_info)
+        if big_wall:
             return States.SEE_WAll
 
-        if not low_floor:
-            return States.SEE_FLOOR
+        return States.SEE_FLOOR

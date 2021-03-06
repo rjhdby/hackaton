@@ -48,14 +48,14 @@ wall_high_color = [12, 255, 255]
 
 # AREA METRICS
 
-low_floor_radius = 30
+low_wall_radius = 30
 
 # Speeds
 
-floor_go_speed = 50
+floor_go_speed = 40
 floor_go_time = 0.5
 
-wall_back_speed = 50
+wall_back_speed = 40
 wall_back_time = 0.5
 
 # DISTANCE MEASURE
