@@ -175,6 +175,7 @@ class Worker:
 
     @debug
     def _search(self, iterations):
+        print ("SEARCH")
         if self.search == 0:
             self.search = iterations
         self.search -= 1
