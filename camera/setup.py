@@ -43,7 +43,7 @@ target_high_color = [75, 255, 255]
 floor_low_color = [0, 4, 4]
 floor_high_color = [255, 30, 30]
 
-wall_low_color = [6, 180, 100]
+wall_low_color = [6, 180, 70]
 wall_high_color = [12, 255, 255]
 
 # AREA METRICS
