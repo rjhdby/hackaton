@@ -112,7 +112,7 @@ class Worker:
         wall_info = processor.get_contours_circle_info(wall_mask, self.image)
         print(f"wall circle info x, y, r {wall_info}")
 
-        return target_info, floor_info, wall_info
+        return [target_info, floor_info, wall_info]
 
     @debug
     def start_hunting(self):
