@@ -24,6 +24,9 @@ class Distance:
         time.sleep(0.00001)
         GPIO.output(self.TRIG, 0)
 
+        start = time.time()
+        stop = time.time()
+
         while GPIO.input(self.ECHO) == 0:
             pass
             start = time.time()
