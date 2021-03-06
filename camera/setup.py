@@ -49,6 +49,7 @@ wall_high_color = [12, 255, 255]
 # AREA METRICS
 
 low_wall_radius = 30
+wall_max_dist = 120
 
 # Speeds
 
