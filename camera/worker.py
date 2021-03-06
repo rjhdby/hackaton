@@ -136,7 +136,8 @@ class Worker:
 
             if current_state == States.SEE_WAll and self.search < 1:
                 # выруливаем пока случайно
-                self.drive.set_random_steer()
+                # self.drive.set_random_steer()
+                self.drive.set_steer(steer_right)
                 # сдаем назад
                 self.drive.drive_backward_for_time(speed=wall_back_speed, stop_time=wall_back_time)
                 continue

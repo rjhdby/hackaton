@@ -43,8 +43,8 @@ target_high_color = [75, 255, 255]
 floor_low_color = [0, 4, 4]
 floor_high_color = [255, 30, 30]
 
-wall_low_color = [6, 180, 70]
-wall_high_color = [12, 255, 255]
+wall_low_color = [6, 140, 70]
+wall_high_color = [20, 255, 255]
 
 # AREA METRICS
 
@@ -55,11 +55,11 @@ wall_max_x_right = 300
 
 # Speeds
 
-floor_go_speed = 30
-floor_go_time = 0.6
+floor_go_speed = 40
+floor_go_time = 1.
 
-wall_back_speed = 30
-wall_back_time = 0.6
+wall_back_speed = 40
+wall_back_time = 1.
 
 slowdown_time = 0.3
 

@@ -80,7 +80,7 @@ class Processor:
         blurred = cv2.GaussianBlur(img, (3, 3), 0)
         img = cv2.cvtColor(blurred, cv2.COLOR_RGB2HSV)
         processor.save_image("input", blurred)
-        # processor.save_image("hsv_input", img)
+        processor.save_image("hsv_input", img)
         return img
 
     @staticmethod
