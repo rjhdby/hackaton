@@ -73,11 +73,6 @@ class Worker:
         target_info = processor.get_contours_circle_info(target_mask, self.image)
         print(f"target circle info x, y, r {target_info}")
 
-        # floor_mask = processor.get_mask(hsv, floor_low_color, floor_high_color)
-        # processor.save_image("floor_mask", floor_mask)
-        # floor_info = processor.get_contours_circle_info(floor_mask, self.image)
-        # print(f"floor circle info x, y, r {floor_info}")
-
         wall_mask = processor.get_mask(hsv, wall_low_color, wall_high_color)
         processor.save_image("wall_mask", wall_mask)
         wall_info = processor.get_contours_circle_info(wall_mask, self.image)
@@ -116,8 +111,9 @@ class Worker:
             if self.search == 0:
                 self.center_camera()
             if self.roaming > 10 or self.search > 1:
+                print (f"SEARCH {self.search}  {self.roaming}")
                 self._search(8)
-                self.roaming = 0
+                # self.roaming = 0
                 continue
 
             self.roaming += 1
