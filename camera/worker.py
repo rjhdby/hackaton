@@ -112,7 +112,7 @@ class Worker:
         wall_info = processor.get_contours_circle_info(wall_mask, self.image)
         print(f"wall circle info x, y, r {wall_info}")
 
-        return [target_info, floor_info, wall_info]
+        return target_info, floor_info, wall_info
 
     @debug
     def start_hunting(self):
@@ -121,9 +121,8 @@ class Worker:
 
             hsv = processor.input_to_hsv(self.image)
 
-            result = self.get_objects_info(hsv)
-            print(result)
-            target_info, floor_info, wall_info = result
+            info = self.get_objects_info(hsv)
+            target_info, floor_info, wall_info = info
 
             current_state = state_predictor.predict(target_info, floor_info, wall_info)
             print("CURRENT STATE")
