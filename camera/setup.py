@@ -55,10 +55,10 @@ wall_max_x_right = 300
 
 # Speeds
 
-floor_go_speed = 40
+floor_go_speed = 30
 floor_go_time = 0.4
 
-wall_back_speed = 40
+wall_back_speed = 30
 wall_back_time = 0.4
 
 slowdown_time = 0.3
