@@ -146,8 +146,8 @@ class Worker:
                 # торможение
                 time.sleep(slowdown_time)
                 # randomный поиск
-                if random.random() < search_on_proba:
-                    self._search(8)
+                # if random.random() < search_on_proba:
+                #     self._search(8)
                 continue
 
             # искать но не должно сюда дойти по идее
