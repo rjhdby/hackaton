@@ -146,8 +146,8 @@ class Worker:
 
                 # двигаться немного прямо
                 self.drive.set_steer(steer_center)
-                # self.drive.drive_forward_for_time(speed=floor_go_speed, stop_time=floor_go_time)
-                self.drive.drive_forward_for_time(speed=floor_go_speed, stop_time=0)
+                self.drive.drive_forward_for_time(speed=floor_go_speed, stop_time=floor_go_time)
+                # self.drive.drive_forward_for_time(speed=floor_go_speed, stop_time=0)
                 # торможение
                 time.sleep(slowdown_time)
                 # randomный поиск
