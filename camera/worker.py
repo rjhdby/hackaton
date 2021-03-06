@@ -115,6 +115,9 @@ class Worker:
             return
         self.drive.track(self.cam_hor - cam_hor_center)
 
+    def shutdown(self):
+        self.drive.stop()
+
 
 class StatePredictor:
 

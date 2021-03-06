@@ -1,4 +1,7 @@
 from camera.worker import Worker
 
 worker = Worker()
-worker.track_target()
+try:
+    worker.track_target()
+except KeyboardInterrupt:
+    worker.shutdown()
