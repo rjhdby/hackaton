@@ -49,7 +49,7 @@ wall_high_color = [20, 255, 255]
 # AREA METRICS
 
 low_wall_radius = 30
-wall_max_dist = 120
+wall_max_dist = 100
 wall_max_x_left = 20
 wall_max_x_right = 300
 
