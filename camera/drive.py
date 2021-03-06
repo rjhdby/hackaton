@@ -42,7 +42,7 @@ class Drive:
     def run_forward(self, speed):
         print("RUN!!!")
         self.motor.setSpeed(speed)
-        self.motor.run_forward(Raspi_MotorHAT.FORWARD)
+        self.motor.run(Raspi_MotorHAT.FORWARD)
 
     @debug
     def drive_backward_for_time(self, speed, stop_time=0.5):
@@ -56,7 +56,7 @@ class Drive:
     def run_backward(self, speed):
         print("RUN BACK!!!")
         self.motor.setSpeed(speed)
-        self.motor.run_forward(Raspi_MotorHAT.BACKWARD)
+        self.motor.run(Raspi_MotorHAT.BACKWARD)
 
     @debug
     def stop(self):
