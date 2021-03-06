@@ -34,8 +34,9 @@ class Drive:
         self.stop()
 
     def run(self, speed):
-        self.motor.setSpeed(speed)
-        self.motor.run(Raspi_MotorHAT.FORWARD)
+        print "RUN!!!"
+        # self.motor.setSpeed(speed)
+        # self.motor.run(Raspi_MotorHAT.FORWARD)
 
     def stop(self):
         self.motor.MC.setPin(self.motor.IN1pin, 1)

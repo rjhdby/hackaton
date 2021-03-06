@@ -54,7 +54,7 @@ class Processor:
                 img_new = img.copy()
                 img_new[:, :, 0] = mask
                 img_new = cv2.cvtColor(img_new, cv2.COLOR_HSV2RGB)
-                self.save_image("image+mask", img_new)
+                # self.save_image("image+mask", img_new)
 
             except Exception as e:
                 print(e)
