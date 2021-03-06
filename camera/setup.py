@@ -1,6 +1,6 @@
 import numpy as np
 
-debug_images = True
+debug_images = False
 debug_images_time = 1
 plot_images = False
 
@@ -73,3 +73,4 @@ attack_speed = 50
 # DISTANCE MEASURE
 
 distance_threshold = 10
+block_threshold = 10

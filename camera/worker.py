@@ -41,6 +41,9 @@ class Worker:
     drive = Drive()
     search = 0
 
+    prev_target_radius = -1
+    prev_wall_radius = -1
+
     def __init__(self):
         self._update_cam(0, 0)
         self.camera.resolution = (cam_hor_res, cam_ver_res)
@@ -129,6 +132,13 @@ class Worker:
 
             current_state = state_predictor.predict(target_info, floor_info, wall_info)
             print(f"CURRENT STATE {current_state}")
+
+            if current_state == States.BLOCKED:
+                # выруливаем пока случайно
+                self.drive.set_random_steer()
+                # сдаем назад
+                self.drive.drive_backward_for_time(speed=wall_back_speed, stop_time=wall_back_time)
+                continue
 
             if current_state == States.SEE_TARGET:
                 self.attack(target_info)

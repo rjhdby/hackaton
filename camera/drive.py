@@ -62,7 +62,7 @@ class Drive:
 
     @debug
     def set_random_steer(self):
-        steer = random.sample([steer_left, steer_right], k=1)[0]
+        steer = random.sample([steer_left, steer_center, steer_right], k=1)[0]
         self.set_steer(steer)
 
     @debug
