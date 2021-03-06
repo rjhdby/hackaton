@@ -44,6 +44,7 @@ class Worker:
         self._update_cam(0, 0)
         self.camera.resolution = (cam_hor_res, cam_ver_res)
         self.camera.framerate = 24
+        self.camera.exposure_mode = 'sports'
         self.camera.start_preview()
         sleep(2)
 
