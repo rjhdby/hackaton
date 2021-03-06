@@ -12,6 +12,7 @@ from matplotlib import pyplot as plt
 import numpy as np
 
 debug_images_path = "./images"
+Path(debug_images_path).mkdir(parents=True, exist_ok=True)
 
 
 @dataclass
