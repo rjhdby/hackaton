@@ -53,7 +53,7 @@ class Worker:
         sleep(2)
 
     @debug
-    def _update_cam(self, err_hor, err_ver, dt=None):
+    def _update_cam(self, err_hor, dt=None):
         self.cam_hor += int(pid_hor(-err_hor, dt))
 
         if self.cam_hor < cam_right:
@@ -191,7 +191,8 @@ class Worker:
         if self.cam_hor < cam_right:
             self.cam_hor = cam_hor_center + 200
 
-        self.center_camera()
+        pid_hor.reset()
+        pwm1.setPWM(1, 0, self.cam_hor)
 
     @debug
     def _move(self, target_radius):
