@@ -39,6 +39,7 @@ class Worker:
     image = np.empty((240 * 320 * 3,), dtype=np.uint8).reshape((240, 320, 3))
 
     drive = Drive()
+    search = 0
 
     def __init__(self):
         self._update_cam(0, 0)
@@ -70,7 +71,7 @@ class Worker:
             hsv = processor.input_to_hsv(self.image)
 
             target_mask = processor.get_mask(hsv, target_low_color, target_high_color)
-            #processor.save_image("target_mask", target_mask)
+            # processor.save_image("target_mask", target_mask)
             target_info = processor.get_contours_circle_info(target_mask, self.image)
             print(f"target circle info x, y, r {target_info}")
             if target_info is None:
@@ -131,14 +132,14 @@ class Worker:
                 self.attack(target_info)
                 continue
 
-            if current_state == States.SEE_WAll:
+            if current_state == States.SEE_WAll and self.search < 1:
                 # выруливаем пока случайно
                 self.drive.set_random_steer()
                 # сдаем назад
                 self.drive.drive_backward_for_time(speed=wall_back_speed, stop_time=wall_back_time)
                 continue
 
-            if current_state == States.SEE_FLOOR:
+            if current_state == States.SEE_FLOOR and self.search < 1:
                 # двигаться немного прямо
                 self.drive.set_steer(steer_center)
                 self.drive.drive_forward_for_time(speed=floor_go_speed, stop_time=floor_go_time)
@@ -146,12 +147,11 @@ class Worker:
                 time.sleep(slowdown_time)
                 # randomный поиск
                 if random.random() < search_on_proba:
-                    self._search()
-                    self._search()
+                    self._search(8)
                 continue
 
             # искать но не должно сюда дойти по идее
-            self._search()
+            self._search(8)
 
     @debug
     def attack(self, target_info):
@@ -165,7 +165,16 @@ class Worker:
         self._move(target_info.radius)
 
     @debug
-    def _search(self):
+    def _search(self, iterations):
+        if self.search == 0:
+            self.search = iterations
+        self.search -= 1
+        if self.search == -1:
+            self.search = 0
+            self.drive.set_to_center()
+            pwm1.setPWM(1, 0, cam_hor_center)
+            return
+
         if self.cam_hor >= cam_hor_center:
             self.cam_hor += 200
         else:

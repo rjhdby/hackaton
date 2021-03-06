@@ -30,6 +30,9 @@ class Drive:
         self.set_steer(steer)
         self.run_forward(attack_speed)
 
+    def set_to_center(self):
+        self.set_steer(steer_center)
+
     @debug
     def drive_forward_for_time(self, speed, stop_time=0.5):
         self.run_forward(speed)
