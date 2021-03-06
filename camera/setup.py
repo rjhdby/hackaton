@@ -55,11 +55,11 @@ wall_max_x_right = 300
 
 # Speeds
 
-floor_go_speed = 40
-floor_go_time = 1.
+floor_go_speed = [37, 45]
+floor_go_time = 0.9
 
-wall_back_speed = 40
-wall_back_time = 1.
+wall_back_speed = [37, 45]
+wall_back_time = 0.9
 
 slowdown_time = 0.3
 
@@ -68,7 +68,7 @@ random_floor_back = 0.05
 random_attack_back = 0.05
 
 
-attack_speed = 50
+attack_speed = [40, 60]
 
 # DISTANCE MEASURE
 

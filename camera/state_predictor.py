@@ -4,7 +4,6 @@ from camera.setup import *
 from camera.states import States
 from camera.utils import debug
 
-import math
 
 distance = Distance()
 
@@ -38,8 +37,12 @@ class StatePredictor:
     def predict(self, target_info, wall_info) -> States:
 
         if target_info is not None and wall_info is not None and target_info.radius < cam_ver_res / 3:
-            max_change_target = max(abs(self.target_r - target_info.radius), abs(self.target_x-target_info.x), abs(self.target_y-target_info.x))
-            max_change_wall = max(abs(self.wall_r - wall_info.radius), abs(self.wall_x-wall_info.x), abs(self.wall_y-wall_info.x))
+            max_change_target = max(abs(self.target_r - target_info.radius),
+                                    abs(self.target_x-target_info.x),
+                                    abs(self.target_y-target_info.y))
+            max_change_wall = max(abs(self.wall_r - wall_info.radius),
+                                  abs(self.wall_x-wall_info.x),
+                                  abs(self.wall_y-wall_info.y))
 
             self.target_r = target_info.radius
             self.target_x = target_info.x

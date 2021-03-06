@@ -91,17 +91,10 @@ class Worker:
             target_info, wall_info = info
 
             current_state = state_predictor.predict(target_info, wall_info)
-            if target_info is not None:
-                self.prev_target_radius = target_info.radius
-            if wall_info is not None:
-                self.prev_wall_radius = wall_info.radius
             print(f"CURRENT STATE {current_state}")
 
             if current_state == States.BLOCKED:
-                # выруливаем пока случайно
-                self.drive.set_random_steer()
-                # сдаем назад
-                self.drive.drive_backward_for_time(speed=wall_back_speed, stop_time=wall_back_time)
+                self.drive.turn_and_back(speed_diapason=wall_back_speed)
                 continue
 
             if current_state == States.SEE_TARGET:
@@ -119,11 +112,7 @@ class Worker:
             self.roaming += 1
 
             if current_state == States.SEE_WAll:
-                # выруливаем пока случайно
-                # self.drive.set_random_steer()
-                self.drive.set_steer(self.steer)
-                # сдаем назад
-                self.drive.drive_backward_for_time(speed=wall_back_speed, stop_time=wall_back_time)
+                self.drive.turn_and_back(speed_diapason=wall_back_speed, steer=self.steer)
                 if random.random() < search_on_proba:
                     if self.steer == steer_right:
                         self.steer = steer_left
@@ -133,22 +122,17 @@ class Worker:
 
             if current_state == States.SEE_FLOOR and self.search < 1:
                 if random.random() < random_floor_back:
-                    # но иногда сдаем назад из-за залипаний
-                    # выруливаем пока случайно
-                    self.drive.set_random_steer()
-                    # сдаем назад
-                    self.drive.drive_backward_for_time(speed=wall_back_speed, stop_time=wall_back_time)
+                    # НУЖНО ЛИ ??
+                    self.drive.turn_and_back(speed_diapason=wall_back_speed)
                     continue
 
                 # двигаться немного прямо
                 self.drive.set_steer(steer_center)
-                self.drive.drive_forward_for_time(speed=floor_go_speed, stop_time=floor_go_time)
-                # self.drive.drive_forward_for_time(speed=floor_go_speed, stop_time=0)
+                floor_speed = self.drive.pick_random_speed(floor_go_speed)
+                self.drive.drive_forward_for_time(speed=floor_speed, stop_time=floor_go_time)
+
                 # торможение
                 time.sleep(slowdown_time)
-                # randomный поиск
-                # if random.random() < search_on_proba:
-                #     self._search(8)
                 continue
 
             # искать но не должно сюда дойти по идее
@@ -158,10 +142,8 @@ class Worker:
     def attack(self, target_info):
         print(f"do attack for {target_info}")
         angle_x_err = (target_info.x / cam_hor_res - 0.5) * cam_x_angle
-        # angle_y_err = (target_info.y / cam_ver_res - 0.5) * cam_y_angle
-
         x_err = -(cam_left - cam_right) * angle_x_err // 180
-        # y_err = (cam_down - cam_up) * angle_y_err // 100
+
         self._update_cam(x_err)
         self._move(target_info.radius)
 

@@ -25,10 +25,18 @@ class Drive:
         print(f"drive.track: steer: {steer}")
 
         self.set_steer(steer)
-        self.run_forward(attack_speed)
+
+        speed = self.pick_random_speed(attack_speed)
+        self.run_forward(speed)
 
     def set_to_center(self):
         self.set_steer(steer_center)
+
+    @debug
+    def pick_random_speed(self, diapason):
+        speed = random.randint(*diapason)
+        print(f"pick random speed {speed}")
+        return speed
 
     @debug
     def drive_forward_for_time(self, speed, stop_time=0.5):
@@ -44,6 +52,20 @@ class Drive:
         self.motor.run(Raspi_MotorHAT.FORWARD)
 
     @debug
+    def turn_and_back(self, speed_diapason, steer=None):
+        # выруливание с поворотом назад
+        print(f"turn and back for speed_diapason : {speed_diapason} steer: {steer}")
+        if steer is None:
+            # выруливаем случайно
+            self.set_random_steer()
+        else:
+            # выруливаем определенно
+            self.set_steer(steer)
+        # сдаем назад
+        speed = self.pick_random_speed(speed_diapason)
+        self.drive_backward_for_time(speed=speed, stop_time=wall_back_time)
+
+    @debug
     def drive_backward_for_time(self, speed, stop_time=0.5):
         self.run_backward(speed)
         time.sleep(stop_time)
@@ -51,7 +73,7 @@ class Drive:
 
     @debug
     def run_backward(self, speed):
-        print("RUN BACK!!!")
+        print(f"RUN BACK!!! speed {speed}")
         self.motor.setSpeed(speed)
         self.motor.run(Raspi_MotorHAT.BACKWARD)
 
