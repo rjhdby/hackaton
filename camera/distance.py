@@ -49,5 +49,6 @@ class Distance:
     @debug
     def is_distance_low_threshold(self, threshold=distance_threshold):
         distance = self.measure()
-
-        return distance < threshold
+        lower = distance < threshold
+        print(f"Found low distance: {lower}")
+        return lower
