@@ -40,9 +40,7 @@ class Worker:
 
     drive = Drive()
     search = 0
-
-    prev_target_radius = -1
-    prev_wall_radius = -1
+    steer = steer_right
 
     def __init__(self):
         self._update_cam(0, 0)
@@ -95,8 +93,7 @@ class Worker:
             info = self.get_objects_info(hsv)
             target_info, floor_info, wall_info = info
 
-            current_state = state_predictor.predict(target_info, floor_info, wall_info, self.prev_target_radius,
-                                                    self.prev_wall_radius)
+            current_state = state_predictor.predict(target_info, floor_info, wall_info)
             if target_info is not None:
                 self.prev_target_radius = target_info.radius
             if wall_info is not None:
@@ -119,9 +116,14 @@ class Worker:
             if current_state == States.SEE_WAll and self.search < 1:
                 # выруливаем пока случайно
                 # self.drive.set_random_steer()
-                self.drive.set_steer(steer_right)
+                self.drive.set_steer(self.steer)
                 # сдаем назад
                 self.drive.drive_backward_for_time(speed=wall_back_speed, stop_time=wall_back_time)
+                if random.random() < search_on_proba:
+                    if self.steer == steer_right:
+                        self.steer = steer_left
+                    else:
+                        self.steer = steer_right
                 continue
 
             if current_state == States.SEE_FLOOR and self.search < 1:

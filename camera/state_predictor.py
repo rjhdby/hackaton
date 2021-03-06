@@ -11,6 +11,14 @@ distance = Distance()
 
 class StatePredictor:
 
+    wall_x = 0
+    wall_y = 0
+    wall_r = 0
+
+    target_x = 0
+    target_y = 0
+    target_r = 0
+
     @staticmethod
     @debug
     def _is_big_wall_area(wall_info):
@@ -26,17 +34,22 @@ class StatePredictor:
         if wall_info is not None:
             return wall_info.y > wall_max_dist
 
-    @staticmethod
     @debug
-    def predict(target_info, floor_info, wall_info, prev_target_radius, prev_wall_radius) -> States:
+    def predict(self, target_info, floor_info, wall_info) -> States:
 
         if target_info is not None and wall_info is not None and target_info.radius < cam_ver_res / 3:
-            target_change = abs(prev_target_radius - target_info.radius)
-            wall_change = abs(prev_wall_radius - wall_info.radius)
+            max_change_target = max(abs(self.target_r - target_info.radius), abs(self.target_x-target_info.x), abs(self.target_y-target_info.x))
+            max_change_wall = max(abs(self.wall_r - wall_info.radius), abs(self.wall_x-wall_info.x), abs(self.wall_y-wall_info.x))
 
-            if target_change < block_threshold and wall_change < block_threshold:
+            if max_change_target + max_change_wall < block_threshold:
                 print("BLOCKED!!!")
                 return States.BLOCKED
+        self.target_r=target_info.radius
+        self.target_x=target_info.x
+        self.target_y=target_info.y
+        self.wall_r=wall_info.radius
+        self.wall_x=wall_info.x
+        self.wall_y=wall_info.y
 
         if target_info is not None:
             print("TARGET!!!")
