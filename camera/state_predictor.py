@@ -41,15 +41,16 @@ class StatePredictor:
             max_change_target = max(abs(self.target_r - target_info.radius), abs(self.target_x-target_info.x), abs(self.target_y-target_info.x))
             max_change_wall = max(abs(self.wall_r - wall_info.radius), abs(self.wall_x-wall_info.x), abs(self.wall_y-wall_info.x))
 
+            self.target_r = target_info.radius
+            self.target_x = target_info.x
+            self.target_y = target_info.y
+            self.wall_r = wall_info.radius
+            self.wall_x = wall_info.x
+            self.wall_y = wall_info.y
+
             if max_change_target + max_change_wall < block_threshold:
                 print("BLOCKED!!!")
                 return States.BLOCKED
-        self.target_r=target_info.radius
-        self.target_x=target_info.x
-        self.target_y=target_info.y
-        self.wall_r=wall_info.radius
-        self.wall_x=wall_info.x
-        self.wall_y=wall_info.y
 
         if target_info is not None:
             print("TARGET!!!")
