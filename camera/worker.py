@@ -42,7 +42,7 @@ class Worker:
     search = 0
     steer = steer_right
 
-    roaming = 10
+    roaming = 12
 
     def __init__(self):
         self._update_cam(0, 0)
