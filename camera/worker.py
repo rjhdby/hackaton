@@ -83,6 +83,7 @@ class Worker:
 
     @debug
     def start_hunting(self):
+        SoundPlayer.init()
         for _ in self.camera.capture_continuous(self.image, format='rgb', use_video_port=True):
             clear_output(wait=True)
 
