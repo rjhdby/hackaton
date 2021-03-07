@@ -35,7 +35,7 @@ class Drive:
     @debug
     def pick_random_speed(self, diapason):
         speed = random.randint(*diapason)
-        print(f"pick random speed {speed}")
+        # print(f"pick random speed {speed}")
         return speed
 
     @debug

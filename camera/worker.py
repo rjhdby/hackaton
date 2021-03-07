@@ -151,7 +151,7 @@ class Worker:
 
     @debug
     def attack(self, target_info):
-        print(f"do attack for {target_info}")
+        # print(f"do attack for {target_info}")
         angle_x_err = (target_info.x / cam_hor_res - 0.5) * cam_x_angle
         x_err = -(cam_left - cam_right) * angle_x_err // 180
 
@@ -164,7 +164,6 @@ class Worker:
 
     @debug
     def _search(self, iterations):
-        print ("SEARCH")
         if self.search == 0:
             self.search = iterations
         self.search -= 1
@@ -190,7 +189,7 @@ class Worker:
     @debug
     def _move(self, target_radius):
         if target_radius != 0 and target_radius > cam_ver_res / 3:
-            print ("STOP!!!")
+            # print ("STOP!!!")
             self.drive.stop()
             return
         self.drive.track(self.cam_hor - cam_hor_center)
