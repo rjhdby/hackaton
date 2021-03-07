@@ -112,6 +112,13 @@ class Worker:
             self.roaming += 1
 
             if current_state == States.SEE_WAll:
+                if random.random() < random_wall_forward:
+                    # двигаться немного прямо
+                    self.drive.set_steer(steer_center)
+                    floor_speed = self.drive.pick_random_speed(floor_go_speed)
+                    self.drive.drive_forward_for_time(speed=floor_speed, stop_time=floor_go_time)
+                    continue
+
                 self.drive.turn_and_back(speed_diapason=wall_back_speed, steer=self.steer)
                 if random.random() < search_on_proba:
                     if self.steer == steer_right:

@@ -55,10 +55,10 @@ wall_max_x_right = 300
 
 # Speeds
 
-floor_go_speed = [37, 45]
+floor_go_speed = [38, 45]
 floor_go_time = 0.9
 
-wall_back_speed = [37, 45]
+wall_back_speed = [38, 45]
 wall_back_time = 0.9
 
 slowdown_time = 0.2
@@ -66,6 +66,7 @@ slowdown_time = 0.2
 search_on_proba = 0.1
 random_floor_back = 0.05
 random_attack_back = 0.05
+random_wall_forward = 0.07
 
 
 attack_speed = [40, 60]
