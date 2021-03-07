@@ -10,3 +10,4 @@ matplotlib
 imutils
 simple_pid
 RPi.GPIO
+requests

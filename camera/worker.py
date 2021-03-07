@@ -15,6 +15,7 @@ import random
 
 from camera.drive import Drive
 from camera.setup import *
+from camera.speaker import SoundPlayer
 from camera.state_predictor import StatePredictor
 from camera.states import States
 from camera.utils import debug
@@ -92,6 +93,8 @@ class Worker:
 
             current_state = state_predictor.predict(target_info, wall_info)
             print(f"CURRENT STATE {current_state}")
+
+            SoundPlayer.speak(current_state)
 
             if current_state == States.BLOCKED:
                 self.drive.turn_and_back(speed_diapason=wall_back_speed)
